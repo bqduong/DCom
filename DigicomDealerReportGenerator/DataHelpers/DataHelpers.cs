@@ -150,6 +150,26 @@ namespace DigicomDealerReportGenerator
                     .ToList();
         }
 
+        //public static IEnumerable<QualifiedTransactionRow> AdjustTransactionDates(IEnumerable<ITransactionRow> masterTransactionList, DateTime startDate)
+        //{
+        //    foreach (var row in masterTransactionList)
+        //    {
+        //        var qRow = row as QualifiedTransactionRow;
+        //        if (qRow.TransactionDate.Month != startDate.Month)
+        //        {
+        //            qRow.BoltOn = qRow.TransactionDate.ToShortTimeString();
+        //            //qRow.TransactionDate = 
+        //        }
+        //    }
+
+        //    return masterTransactionList as QualifiedTransactionRow;
+        //}
+
+        //public static DateTime GetMatchingTransactionDate(IEnumerable<ITransactionRow> masterTransactionList, DateTime targetPostedDate)
+        //{
+        //    return null;
+        //}
+
 
         public static FileInfo GetTemplateFile(bool isQualified, bool isSoCalReport, string executionPath)
         {
