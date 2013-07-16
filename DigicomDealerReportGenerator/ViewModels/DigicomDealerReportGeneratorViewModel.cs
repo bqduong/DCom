@@ -307,6 +307,19 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
             MessageBox.Show("Done processing reports.");
         }
+
+
+        protected void GenerateCallidusReports(object param = null)
+        {
+            //change to callidusReportGenerator
+            var callidusReportGenerator = new CallidusReportGenerator(this);
+
+            using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(this.IsQualified, this.IsSoCalReport, this.executionPath)))
+            {
+                callidusReportGenerator.GenerateCallidusReport(package);
+            }
+        }
+        
         
         private void NotifyPropertyChanged(String propertyName = "")
         {
