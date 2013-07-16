@@ -285,6 +285,8 @@ namespace DigicomDealerReportGenerator.ViewModels
         {
             var dealerReportGenerator = new DealerReportGenerator(this);
 
+            var t = DataHelpers.AdjustTransactionDates(this.MasterTransactionList, new DateTime(2013, 6, 15));
+
             if (SelectedSourceDealerDoorCode == "All")
             {
                 var doorCodes =

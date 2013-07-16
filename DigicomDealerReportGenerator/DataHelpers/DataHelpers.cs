@@ -150,25 +150,31 @@ namespace DigicomDealerReportGenerator
                     .ToList();
         }
 
-        //public static IEnumerable<QualifiedTransactionRow> AdjustTransactionDates(IEnumerable<ITransactionRow> masterTransactionList, DateTime startDate)
-        //{
-        //    foreach (var row in masterTransactionList)
-        //    {
-        //        var qRow = row as QualifiedTransactionRow;
-        //        if (qRow.TransactionDate.Month != startDate.Month)
-        //        {
-        //            qRow.BoltOn = qRow.TransactionDate.ToShortTimeString();
-        //            //qRow.TransactionDate = 
-        //        }
-        //    }
+        public static IEnumerable<QualifiedTransactionRow> AdjustTransactionDates(IEnumerable<ITransactionRow> masterTransactionList, DateTime reportDate)
+        {
+            var masterList = masterTransactionList.Select(transactionRow => transactionRow as QualifiedTransactionRow).ToList();
 
-        //    return masterTransactionList as QualifiedTransactionRow;
-        //}
+            foreach (var qRow in masterList)
+            {
+                if (qRow.TransactionDate.Month != reportDate.Month && qRow.TransactionDate.Year != 0001)
+                {
+                    qRow.BoltOn = qRow.TransactionDate.ToShortTimeString();
+                    qRow.TransactionDate = GetMatchingTransactionDate(masterTransactionList, qRow.PostedDate,
+                                                                      qRow.TransactionDate);
+                }
+            }
 
-        //public static DateTime GetMatchingTransactionDate(IEnumerable<ITransactionRow> masterTransactionList, DateTime targetPostedDate)
-        //{
-        //    return null;
-        //}
+            return masterList.Select(transactionRow => transactionRow as QualifiedTransactionRow).ToList();
+        }
+
+        public static DateTime GetMatchingTransactionDate(IEnumerable<ITransactionRow> masterTransactionList, DateTime targetPostedDate, DateTime originalTransactionDate)
+        {
+            var matchingTransactionDate =
+                masterTransactionList.Select(transactionRow => transactionRow as QualifiedTransactionRow).First(t => t.PostedDate == targetPostedDate &&
+                                                                                                                     t.TransactionDate != originalTransactionDate).TransactionDate;
+
+            return matchingTransactionDate;
+        }
 
 
         public static FileInfo GetTemplateFile(bool isQualified, bool isSoCalReport, string executionPath)
