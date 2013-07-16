@@ -19,9 +19,9 @@ namespace DigicomDealerReportGenerator.ViewModels
 {
     public class QualifiedDisqualifiedReportGeneratorViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private DigicomReportGeneratorViewModel digicomReportGeneratorViewModel;
+        #region Fields
 
-        private QualifiedDisqualifiedReportGeneratorModel dealerReportGeneratorModel;
+        private QualifiedDisqualifiedReportGeneratorModel qualifiedDisqualifiedReportGeneratorModel;
 
         private ExcelWorksheet templateWorksheet;
 
@@ -48,6 +48,13 @@ namespace DigicomDealerReportGenerator.ViewModels
         private List<IDealerIdentification> masterDealerIdentificationList;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        public QualifiedDisqualifiedReportGeneratorViewModel(string executionPath) : base(executionPath)
+        {
+            this.qualifiedDisqualifiedReportGeneratorModel = new QualifiedDisqualifiedReportGeneratorModel(this);
+        }
 
         #region Properties
 
@@ -224,11 +231,6 @@ namespace DigicomDealerReportGenerator.ViewModels
         }
 
         #endregion
-
-        public QualifiedDisqualifiedReportGeneratorViewModel(DigicomReportGeneratorViewModel digicomReportGeneratorViewModel, string executionPath) : base(executionPath)
-        {
-            this.digicomReportGeneratorViewModel = digicomReportGeneratorViewModel;
-        }
 
         protected void Load(object param = null)
         {

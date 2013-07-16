@@ -37,8 +37,8 @@ namespace DigicomDealerReportGenerator.ViewModels
             var executionPath = this.Initialize();
 
             //dependency injection in the future
-            this.QualifiedDisqualifiedReportGeneratorViewModel = new QualifiedDisqualifiedReportGeneratorViewModel(this, executionPath);
-            this.CallidusReportGeneratorViewModel = new CallidusReportGeneratorViewModel(this, executionPath);
+            this.QualifiedDisqualifiedReportGeneratorViewModel = new QualifiedDisqualifiedReportGeneratorViewModel(executionPath);
+            this.CallidusReportGeneratorViewModel = new CallidusReportGeneratorViewModel(executionPath);
         }
 
         #region Properties

@@ -15,13 +15,14 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="149*"></ColumnDefinition>
+                            <ColumnDefinition Width="243*"/>
+                            <ColumnDefinition Width="196*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Step 1: Select a source Excel file" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.667,1.13" Margin="15,4,0,0"/>
-                        <TextBox Grid.Column="0" Text="{Binding QualifiedDisqualifiedReportGeneratorViewModel.SourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
-                        <CheckBox Grid.Column="0" IsChecked="{Binding Path=QualifiedDisqualifiedReportGeneratorViewModel.IsSoCalReport}" Content="Southern California Dealer Report" HorizontalAlignment="Left" Margin="15,53,0,0" VerticalAlignment="Top" Width="343"/>
-                        <Button Grid.Column="1" Content="Select Excel File" Command="{Binding QualifiedDisqualifiedReportGeneratorViewModel.OpenFileClicked}" Width="150" Margin="23,19,23,27" VerticalAlignment="Stretch"/>
+                        <Label Grid.Column="0" Content="Step 1: Select a source Excel file" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.667,1.13" Margin="15,4,0,0" Grid.ColumnSpan="2"/>
+                        <TextBox Grid.Column="0" Text="{Binding QualifiedDisqualifiedReportGeneratorViewModel.SourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="2"/>
+                        <CheckBox Grid.Column="0" IsChecked="{Binding Path=QualifiedDisqualifiedReportGeneratorViewModel.IsSoCalReport}" Content="Southern California Dealer Report" HorizontalAlignment="Left" Margin="15,53,0,0" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="2"/>
+                        <Button Grid.Column="2" Content="Select Excel File" Command="{Binding QualifiedDisqualifiedReportGeneratorViewModel.OpenFileClicked}" Width="150" Margin="23,19,23,27" VerticalAlignment="Stretch"/>
                     </Grid>
                     <Grid Grid.Row="1" Margin="-1,0,1,0" Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
@@ -60,8 +61,42 @@
             </TabItem>
             <TabItem Header="Callidus" Height="23" VerticalAlignment="Bottom">
                 <Grid>
-                    <Button Width="200" Height="30" Content="Load Bay Area File" Command="{Binding CallidusReportGeneratorViewModel.OpenFileClicked}"></Button>
-                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="105"/>
+                        <RowDefinition Height="105"/>
+                        <RowDefinition Height="65"/>
+                        <RowDefinition Height="55"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Step 1: Load the Crystal Report files for the Bay Area and SoCal" Margin="15,10,42,69"></Label>
+                        <TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.BayAreaSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
+                        <TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.SoCalSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
+                        <Button Width="180" Height="30" Content="Load Bay Area File" Command="{Binding CallidusReportGeneratorViewModel.LoadBayAreaFileClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1" Margin="10,33,6,43"></Button>
+                        <Button Width="180" Height="30" Content="Load SoCal Area File" Command="{Binding CallidusReportGeneratorViewModel.LoadSoCalFileClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1" Margin="10,68,6,8"></Button>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Step 2: Load the QPay (Retail Stores) MASTER SPREADSHEET" Margin="16,-1,34,83"/>
+                        <TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.QPayRetailMasterSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
+                        <Label Grid.Column="0" Content="Step 3: Load the QPay (Online Summary) MASTER SPREADSHEET" Margin="16,51,34,32" Height="23"/>
+                        <TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.QPayOnlineMasterSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
+                        <Button Width="180" Height="30" Content="Load QPay Retail Master" Command="{Binding CallidusReportGeneratorViewModel.LoadQPayRetailMasterClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1" Margin="10,17,6,59"></Button>
+                        <Button Width="180" Height="30" Content="Load QPay Online Master" Command="{Binding CallidusReportGeneratorViewModel.LoadQPayOnlineMasterClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1" Margin="10,68,6,8"></Button>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>

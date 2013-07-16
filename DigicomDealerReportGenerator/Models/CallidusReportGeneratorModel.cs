@@ -1,4 +1,6 @@
-﻿using DigicomDealerReportGenerator.ViewModels;
+﻿using System.Collections.Generic;
+
+using DigicomDealerReportGenerator.ViewModels;
 
 using OfficeOpenXml;
 
@@ -6,12 +8,19 @@ namespace DigicomDealerReportGenerator.Models
 {
     public class CallidusReportGeneratorModel
     {
-        private CallidusReportGeneratorViewModel viewModel;
+        //private CallidusReportGeneratorViewModel viewModel;
 
-        public CallidusReportGeneratorModel(CallidusReportGeneratorViewModel viewModel)
-        {
-            this.viewModel = viewModel;
-        }
+        #region Fields
+
+        #endregion
+
+        #region Properties
+        
+        public IEnumerable<ITransactionRow> MasterBayAreaTransactionList { get; set; }
+
+        public IEnumerable<ITransactionRow> MasterSoCalTransactionList { get; set; }
+        
+        #endregion
 
         public void GenerateCallidusReport(ExcelPackage package)
         {
