@@ -18,6 +18,6 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         protected ExcelQueryFactory Excel;
 
-        protected string ExecutionPath;
+        public string ExecutionPath;
     }
 }

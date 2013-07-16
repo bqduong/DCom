@@ -31,7 +31,7 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         public CallidusReportGeneratorViewModel(string executionPath) : base(executionPath)
         {
-            this.callidusReportGeneratorModel = new CallidusReportGeneratorModel();
+            this.callidusReportGeneratorModel = new CallidusReportGeneratorModel(this);
         }
 
         public string BayAreaSourcePath
@@ -77,6 +77,7 @@ namespace DigicomDealerReportGenerator.ViewModels
                 if (value != this.dateSelect)
                 {
                     this.dateSelect = value;
+                    this.callidusReportGeneratorModel.DateSelect = value;
                     this.NotifyPropertyChanged("DateSelect");
                 }
             }
@@ -111,6 +112,14 @@ namespace DigicomDealerReportGenerator.ViewModels
             get
             {
                 return new SimpleCommand(this.LoadQPayOnlineMasterFile);
+            }
+        }
+
+        public ICommand ProcessQPayReportsClicked
+        {
+            get
+            {
+                return new SimpleCommand(this.ProcessQPayReports);
             }
         }
 
@@ -213,7 +222,11 @@ namespace DigicomDealerReportGenerator.ViewModels
                 }
             }
         }
-        
+
+        protected void ProcessQPayReports(object param = null)
+        {
+            this.callidusReportGeneratorModel.ProcessQPayReports();   
+        }
 
         private void NotifyPropertyChanged(String propertyName = "")
         {

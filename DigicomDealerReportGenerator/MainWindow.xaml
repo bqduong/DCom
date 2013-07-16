@@ -97,7 +97,10 @@
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Step 4: Select the 1st of the month for reports:" Margin="17,0,38,35"/>
-                        <DatePicker Grid.Column="0" Margin="16,25,171,13"></DatePicker>
+                        <DatePicker Grid.Column="0" Margin="16,25,171,13" SelectedDate="{Binding CallidusReportGeneratorViewModel.DateSelect}"></DatePicker>
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <Button Width="180" Height="30" Content="Process QPay Reports" Command="{Binding CallidusReportGeneratorViewModel.ProcessQPayReportsClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1"></Button>
                     </Grid>
                 </Grid>
             </TabItem>

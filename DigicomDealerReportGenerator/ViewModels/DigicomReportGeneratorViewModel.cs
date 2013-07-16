@@ -54,17 +54,6 @@ namespace DigicomDealerReportGenerator.ViewModels
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        //protected void GenerateCallidusReports(object param = null)
-        //{
-        //    //change to callidusReportGenerator
-        //    var callidusReportGenerator = new CallidusReportGeneratorViewModel(this);
-
-        //    using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(this.IsQualified, this.IsSoCalReport, this.executionPath)))
-        //    {
-        //        //callidusReportGenerator.GenerateCallidusReport(package);
-        //    }
-        //}
-        
         private void NotifyPropertyChanged(String propertyName = "")
         {
             if (PropertyChanged != null)
