@@ -19,9 +19,9 @@
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Step 1: Select a source Excel file" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.667,1.13" Margin="15,4,0,0"/>
-                        <TextBox Grid.Column="0" Text="{Binding SourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
-                        <CheckBox Grid.Column="0" IsChecked="{Binding Path=IsSoCalReport}" Content="Southern California Dealer Report" HorizontalAlignment="Left" Margin="15,53,0,0" VerticalAlignment="Top" Width="343"/>
-                        <Button Grid.Column="1" Content="Select Excel File" Command="{Binding OpenFileClicked}" Width="150" Margin="23,19,23,27" VerticalAlignment="Stretch"/>
+                        <TextBox Grid.Column="0" Text="{Binding QualifiedDisqualifiedReportGeneratorViewModel.SourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
+                        <CheckBox Grid.Column="0" IsChecked="{Binding Path=QualifiedDisqualifiedReportGeneratorViewModel.IsSoCalReport}" Content="Southern California Dealer Report" HorizontalAlignment="Left" Margin="15,53,0,0" VerticalAlignment="Top" Width="343"/>
+                        <Button Grid.Column="1" Content="Select Excel File" Command="{Binding QualifiedDisqualifiedReportGeneratorViewModel.OpenFileClicked}" Width="150" Margin="23,19,23,27" VerticalAlignment="Stretch"/>
                     </Grid>
                     <Grid Grid.Row="1" Margin="-1,0,1,0" Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
@@ -29,9 +29,9 @@
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" Margin="0,0,36,0">
-                            <ComboBox ItemsSource="{Binding Path=MasterDealerIdentificationList, Mode=OneWay}" 
+                            <ComboBox ItemsSource="{Binding Path=QualifiedDisqualifiedReportGeneratorViewModel.MasterDealerIdentificationList, Mode=OneWay}" 
                                       DisplayMemberPath="FullDealerIdentification" 
-                                      SelectedValue="{Binding SelectedSourceDealerDoorCode}"
+                                      SelectedValue="{Binding QualifiedDisqualifiedReportGeneratorViewModel.SelectedSourceDealerDoorCode}"
                                       SelectedValuePath="DoorCode"
                                       SelectedIndex="0"
                                       HorizontalAlignment="Left" Margin="15,30,0,0" VerticalAlignment="Top" Width="240">
@@ -39,8 +39,8 @@
                             <Label Content="Step 2: Select a specific dealer OR [All Dealers]" HorizontalAlignment="Left" Margin="16,7,0,0" VerticalAlignment="Top"/>
                         </Grid>
                         <Label Content="Step 3: Select a transaction date range" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                        <DatePicker SelectedDate="{Binding StartDate}" HorizontalAlignment="Left" Margin="88,39,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
-                        <DatePicker SelectedDate="{Binding EndDate}" HorizontalAlignment="Left" Margin="88,68,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.91,0.167" Grid.Column="1"/>
+                        <DatePicker SelectedDate="{Binding QualifiedDisqualifiedReportGeneratorViewModel.StartDate}" HorizontalAlignment="Left" Margin="88,39,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
+                        <DatePicker SelectedDate="{Binding QualifiedDisqualifiedReportGeneratorViewModel.EndDate}" HorizontalAlignment="Left" Margin="88,68,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.91,0.167" Grid.Column="1"/>
                         <Label Content="Start Date:" Grid.Column="1" HorizontalAlignment="Left" Margin="25,39,0,0" VerticalAlignment="Top" Width="63" Height="24"/>
                         <Label Content="End Date:" Grid.Column="1" HorizontalAlignment="Left" Margin="31,67,0,0" VerticalAlignment="Top" Width="57"/>
                     </Grid>
@@ -50,16 +50,19 @@
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Content="Step 4: Select a destination path" HorizontalAlignment="Left" Margin="15,0,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-                        <TextBox Grid.Row="2" Text="{Binding Path=DestinationPath}" HorizontalAlignment="Left" Height="25" Margin="15,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="3"/>
-                        <Button Width="150" Content="Select Destination Path" Command="{Binding SelectDestinationPathClicked}" Grid.Column="1" Margin="23,16,23,10" VerticalAlignment="Stretch"/>
-                    </Grid>                 
-                    <Button Width="120" Content="Generate Reports" Command="{Binding GenerateReportsClicked}" Margin="24,37,424,-19" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1"/>                    
+                        <TextBox Grid.Row="2" Text="{Binding Path=QualifiedDisqualifiedReportGeneratorViewModel.DestinationPath}" HorizontalAlignment="Left" Height="25" Margin="15,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="3"/>
+                        <Button Width="150" Content="Select Destination Path" Command="{Binding QualifiedDisqualifiedReportGeneratorViewModel.SelectDestinationPathClicked}" Grid.Column="1" Margin="23,16,23,10" VerticalAlignment="Stretch"/>
+                    </Grid>
+                    <Button Width="120" Content="Generate Reports" Command="{Binding QualifiedDisqualifiedReportGeneratorViewModel.GenerateReportsClicked}" Margin="24,37,424,-19" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1"/>                    
                     <Label Content="Step 5: Generate the report(s)" HorizontalAlignment="Left" Margin="15,10,0,0" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
                     <Image HorizontalAlignment="Left" Height="48" Margin="406,27,0,-19" Grid.Row="3" VerticalAlignment="Top" Width="172" Source="/Media/digicomIcon.png"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Callidus" Height="23" VerticalAlignment="Bottom">
-                <Grid></Grid>
+                <Grid>
+                    <Button Width="200" Height="30" Content="Load Bay Area File" Command="{Binding CallidusReportGeneratorViewModel.OpenFileClicked}"></Button>
+                    
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

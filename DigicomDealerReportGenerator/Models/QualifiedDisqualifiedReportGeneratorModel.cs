@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using DigicomDealerReportGenerator.FormattingHelper;
-using DigicomDealerReportGenerator.Models;
+using DigicomDealerReportGenerator.ViewModels;
 
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 
-namespace DigicomDealerReportGenerator.ViewModels
+namespace DigicomDealerReportGenerator.Models
 {
-    public class DealerReportGenerator
+    public class QualifiedDisqualifiedReportGeneratorModel
     {
-        private DigicomDealerReportGeneratorViewModel viewModel;
+        private QualifiedDisqualifiedReportGeneratorViewModel viewModel;
 
-        public DealerReportGenerator(DigicomDealerReportGeneratorViewModel viewModel)
+        public QualifiedDisqualifiedReportGeneratorModel(QualifiedDisqualifiedReportGeneratorViewModel viewModel)
         {
             this.viewModel = viewModel;
         }

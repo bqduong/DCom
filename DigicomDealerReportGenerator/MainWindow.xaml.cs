@@ -26,7 +26,7 @@ namespace DigicomDealerReportGenerator
         {
             InitializeComponent();
 
-            this.DataContext = new DigicomDealerReportGeneratorViewModel();
+            this.DataContext = new DigicomReportGeneratorViewModel();
         }
     }
 }

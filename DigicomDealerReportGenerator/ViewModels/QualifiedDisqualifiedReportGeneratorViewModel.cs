@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.OleDb;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 
-using DigicomDealerReportGenerator.FormattingHelper;
+using DigicomDealerReportGenerator.Commands;
 using DigicomDealerReportGenerator.MappingHelper;
 using DigicomDealerReportGenerator.Models;
 
 using LinqToExcel;
 
-using DigicomDealerReportGenerator.Annotations;
-using DigicomDealerReportGenerator.Commands;
-
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 
 namespace DigicomDealerReportGenerator.ViewModels
 {
-    public class DigicomDealerReportGeneratorViewModel : INotifyPropertyChanged
+    public class QualifiedDisqualifiedReportGeneratorViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private ExcelQueryFactory excel;
+        private DigicomReportGeneratorViewModel digicomReportGeneratorViewModel;
+
+        private QualifiedDisqualifiedReportGeneratorModel dealerReportGeneratorModel;
 
         private ExcelWorksheet templateWorksheet;
 
@@ -52,16 +43,11 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         private string selectedSourceDealerDoorCode;
 
-        private IEnumerable<ITransactionRow> masterTransactionList; 
+        private IEnumerable<ITransactionRow> masterTransactionList;
 
         private List<IDealerIdentification> masterDealerIdentificationList;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public DigicomDealerReportGeneratorViewModel()
-        {
-            this.Initialize();
-        }
 
         #region Properties
 
@@ -237,11 +223,11 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
         }
 
-        #endregion Properties
+        #endregion
 
-        protected void Initialize()
+        public QualifiedDisqualifiedReportGeneratorViewModel(DigicomReportGeneratorViewModel digicomReportGeneratorViewModel, string executionPath) : base(executionPath)
         {
-            this.executionPath = AppDomain.CurrentDomain.BaseDirectory;
+            this.digicomReportGeneratorViewModel = digicomReportGeneratorViewModel;
         }
 
         protected void Load(object param = null)
@@ -252,12 +238,12 @@ namespace DigicomDealerReportGenerator.ViewModels
                 try
                 {
                     this.SourcePath = this.openFile.FileName;
-                    this.excel = new ExcelQueryFactory(this.SourcePath);
+                    this.Excel = new ExcelQueryFactory(this.SourcePath);
                     this.IsQualified = DataHelpers.IsQualified(this.SourcePath);
-                    LinqToExcelMappingHelpers.MapToLinq(ref this.excel, DataHelpers.GetReportType, this.SourcePath);
+                    LinqToExcelMappingHelpers.MapToLinq(ref this.Excel, DataHelpers.GetReportType, this.SourcePath);
 
                     //populate dropdown list
-                    this.MasterTransactionList = DataHelpers.GetMasterListOfTransactionRows(this.IsQualified, this.excel);
+                    this.MasterTransactionList = DataHelpers.GetMasterListOfTransactionRows(this.IsQualified, this.Excel);
                     this.MasterDealerIdentificationList = DataHelpers.GenerateDoorNameListWithDoorCode(this.MasterTransactionList);
 
                     //populate date range
@@ -274,7 +260,7 @@ namespace DigicomDealerReportGenerator.ViewModels
         protected void SetDestinationPath(object param = null)
         {
             var dialog = new FolderBrowserDialog();
-            
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 this.DestinationPath = dialog.SelectedPath;
@@ -283,7 +269,7 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         protected void GenerateReports(object param = null)
         {
-            var dealerReportGenerator = new DealerReportGenerator(this);
+            var dealerReportGenerator = new QualifiedDisqualifiedReportGeneratorModel(this);
 
             var t = DataHelpers.AdjustTransactionDates(this.MasterTransactionList, new DateTime(2013, 6, 15));
 
@@ -309,19 +295,6 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
             MessageBox.Show("Done processing reports.");
         }
-
-
-        protected void GenerateCallidusReports(object param = null)
-        {
-            //change to callidusReportGenerator
-            var callidusReportGenerator = new CallidusReportGenerator(this);
-
-            using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(this.IsQualified, this.IsSoCalReport, this.executionPath)))
-            {
-                callidusReportGenerator.GenerateCallidusReport(package);
-            }
-        }
-        
         
         private void NotifyPropertyChanged(String propertyName = "")
         {

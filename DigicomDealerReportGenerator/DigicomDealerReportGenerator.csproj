@@ -95,8 +95,12 @@
     <Compile Include="Models\ITransactionRow.cs" />
     <Compile Include="Models\QualifiedTransactionRow.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ViewModels\DealerReportGenerator.cs" />
-    <Compile Include="ViewModels\DigicomDealerReportGeneratorViewModel.cs" />
+    <Compile Include="Models\CallidusReportGeneratorModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\CallidusReportGeneratorViewModel.cs" />
+    <Compile Include="Models\QualifiedDisqualifiedReportGeneratorModel.cs" />
+    <Compile Include="ViewModels\QualifiedDisqualifiedReportGeneratorViewModel.cs" />
+    <Compile Include="ViewModels\DigicomReportGeneratorViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

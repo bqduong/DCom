@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DigicomDealerReportGenerator.ViewModels;
 
 using OfficeOpenXml;
 
-namespace DigicomDealerReportGenerator.ViewModels
+namespace DigicomDealerReportGenerator.Models
 {
-    public class CallidusReportGenerator
+    public class CallidusReportGeneratorModel
     {
-        private DigicomDealerReportGeneratorViewModel viewModel;
+        private CallidusReportGeneratorViewModel viewModel;
 
-        public CallidusReportGenerator(DigicomDealerReportGeneratorViewModel viewModel)
+        public CallidusReportGeneratorModel(CallidusReportGeneratorViewModel viewModel)
         {
             this.viewModel = viewModel;
         }
