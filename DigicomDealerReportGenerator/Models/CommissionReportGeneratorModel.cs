@@ -22,6 +22,10 @@ namespace DigicomDealerReportGenerator.Models
 
         public void GenerateSingleReport(string fullDealerId, ExcelPackage package)
         {
+            var commissionTotalRows =
+                this.GenerateCommissionTotalRows(
+                    this.CommissionReportGeneratorViewModel.MasterTransactionList,
+                    this.CommissionReportGeneratorViewModel.MasterResidualTransactionList);
 
             var fullDealerSplit = fullDealerId.Split('-');
             var reportDataRows =
@@ -82,6 +86,44 @@ namespace DigicomDealerReportGenerator.Models
             reportPackage.Workbook.Worksheets.Add("Report", worksheet);
             reportPackage.Save();
             reportPackage.Dispose();
+        }
+
+
+        protected IEnumerable<CommissionTotalRow> GenerateCommissionTotalRows(IEnumerable<CommissionRow> masterCommissionRows, IEnumerable<ResidualRow> masterResidualRows)
+        {
+            var agents = masterCommissionRows.GroupBy(m => new { m.Agent }).Select(g => g.Key).ToList();
+
+
+            var commissionTotalRows = (from agent in agents let sum = masterCommissionRows
+                                            .Where(m => m.Agent == agent.Agent)
+                                            .Select(c => c.CommissionAmount)
+                                            .Sum() select new CommissionTotalRow()
+                                                              {
+                                                                  Agent = agent.ToString(),
+                                                                  CompleteTotal = Math.Round(sum, 2),
+                                                                  Total = Math.Round(sum, 2), 
+                                                                  IsCommission = true, 
+                                                                  IsTerminated = agent.ToString().Contains("terminated")
+                                                              }).OrderBy(a => a.Agent).ToList();
+
+            agents = masterResidualRows.GroupBy(m => new { m.Agent }).Select(g => g.Key).ToList();
+
+            var groupedResidualRows = (from agent in agents
+                                       let sum = masterResidualRows
+                      .Where(m => m.Agent == agent.Agent)
+                      .Select(c => c.ResidualAmount)
+                      .Sum()
+                                       select new CommissionTotalRow()
+                                       {
+                                           Agent = agent.ToString(),
+                                           CompleteTotal = Math.Round(sum, 2),
+                                           Total = Math.Round(sum, 2),
+                                           IsCommission = false,
+                                           IsTerminated = agent.ToString().Contains("terminated")
+                                       }).OrderBy(a => a.Agent).ToList();
+
+            commissionTotalRows.AddRange(groupedResidualRows);
+            return commissionTotalRows.OrderBy(c => c.Agent);
         }
     }
 }

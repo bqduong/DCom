@@ -269,6 +269,15 @@ namespace DigicomDealerReportGenerator
         public static IEnumerable<CommissionRow> GetMasterListOfCommissionRows(ExcelQueryFactory excel)
         {
             var validRows = (from x in excel.Worksheet<CommissionRow>("Commission Payout") select x).ToList();
+            validRows.RemoveAll(v => v.DealerCode == null);
+            return validRows;
+        }
+
+
+        public static IEnumerable<ResidualRow> GetMasterListOfResidualRows(ExcelQueryFactory excel)
+        {
+            var validRows = (from x in excel.Worksheet<ResidualRow>("Residual Payout") select x).ToList();
+            validRows.RemoveAll(v => v.DealerId == null);
             return validRows;
         }
     }

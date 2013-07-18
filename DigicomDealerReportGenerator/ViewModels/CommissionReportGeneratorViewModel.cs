@@ -36,6 +36,8 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         private IEnumerable<CommissionRow> masterTransactionList;
 
+        private IEnumerable<ResidualRow> masterResidualTransactionList;
+
         private List<IDealerIdentification> masterDealerIdentificationList;
 
         public CommissionReportGeneratorViewModel(string executionPath)
@@ -160,6 +162,18 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
         }
 
+        public IEnumerable<ResidualRow> MasterResidualTransactionList
+        {
+            get
+            {
+                return this.masterResidualTransactionList;
+            }
+            set
+            {
+                this.masterResidualTransactionList = value;
+            }
+        }
+
         protected void Load(object param = null)
         {
             this.openFile = new OpenFileDialog();
@@ -170,10 +184,14 @@ namespace DigicomDealerReportGenerator.ViewModels
                     this.SourcePath = this.openFile.FileName;
                     this.Excel = new ExcelQueryFactory(this.SourcePath);
                     LinqToExcelMappingHelpers.MapCommissionRowToLinq(ref this.Excel);
+                    LinqToExcelMappingHelpers.MapResidualRowToLinq(ref this.Excel);
 
                     //populate dropdown list
                     this.MasterTransactionList = DataHelpers.GetMasterListOfCommissionRows(this.Excel);
                     this.MasterDealerIdentificationList = DataHelpers.GenerateAgentListWithDealerCode(this.MasterTransactionList);
+
+                    //populate residual list
+                    this.MasterResidualTransactionList = DataHelpers.GetMasterListOfResidualRows(this.Excel);
                 }
                 catch (Exception e)
                 {
