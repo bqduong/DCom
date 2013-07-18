@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,8 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         private string selectedSourceDealerCode;
 
+        private string weekInput;
+
         private IEnumerable<CommissionRow> masterTransactionList;
 
         private List<IDealerIdentification> masterDealerIdentificationList;
@@ -40,7 +43,6 @@ namespace DigicomDealerReportGenerator.ViewModels
         {
             this.commissionReportGeneratorModel = new CommissionReportGeneratorModel(this);
         }
-
 
         public ICommand OpenFileClicked
         {
@@ -142,6 +144,21 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
         }
 
+        public string WeekInput
+        {
+            get
+            {
+                return this.weekInput;
+            }
+            set
+            {
+                if (value != this.weekInput)
+                {
+                    this.weekInput = value;
+                    this.NotifyPropertyChanged("WeekInput");
+                }
+            }
+        }
 
         protected void Load(object param = null)
         {
@@ -181,23 +198,23 @@ namespace DigicomDealerReportGenerator.ViewModels
 
             if (SelectedSourceDealerCode == "All")
             {
-                var dealerCodes =
-                    this.MasterDealerIdentificationList.Where(m => m.DoorCode != "All").Select(m => m.DoorCode);
+                var fullDealerIds =
+                    this.MasterDealerIdentificationList.Where(m => m.DoorCode != "All").Select(m => m.FullDealerIdentification);
 
-                foreach (var dealerCode in dealerCodes)
+                foreach (var fullDealerId in fullDealerIds)
                 {
-                    //using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(this.IsQualified, this.IsSoCalReport, this.executionPath)))
-                    //{
-                    //    commissionReportGeneratorModel.GenerateSingleReport(dealerCode, package);
-                    //}
+                    using (ExcelPackage package = new ExcelPackage(new FileInfo(this.ExecutionPath + "Digicom Templates\\Commission Report Template.xlsx")))
+                    {
+                        commissionReportGeneratorModel.GenerateSingleReport(fullDealerId, package);
+                    }
                 }
             }
             else
             {
-                //using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(this.IsQualified, this.IsSoCalReport, this.executionPath)))
-                //{
-                //    commissionReportGeneratorModel.GenerateSingleReport(this.SelectedSourceDealerCode, package);
-                //}
+                using (ExcelPackage package = new ExcelPackage(new FileInfo(this.ExecutionPath + "Digicom Templates\\Commission Report Template.xlsx")))
+                {
+                    commissionReportGeneratorModel.GenerateSingleReport(this.selectedSourceDealerCode, package);
+                }
             }
             MessageBox.Show("Done processing reports.");
         }

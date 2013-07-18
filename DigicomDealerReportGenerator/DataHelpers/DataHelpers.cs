@@ -242,7 +242,9 @@ namespace DigicomDealerReportGenerator
                     DoorName = distinctItem.Agent,
                     FullDealerIdentification = distinctItem.DealerCode + " - " + distinctItem.Agent
                 })
-                .Cast<IDealerIdentification>().ToList());
+                .Cast<IDealerIdentification>().OrderBy(d => d.DoorName).ToList());
+
+            distinctDealers.RemoveAll(d => d.DoorCode == null && d.DoorName == null);
 
             return distinctDealers;
         }

@@ -106,8 +106,55 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Commission">
-               <Button Width="180" Height="30" Content="Load Source" Command="{Binding CommissionReportGeneratorViewModel.OpenFileClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1" Margin="10,17,6,59">
-                </Button>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="85"/>
+                        <RowDefinition Height="65"/>
+                        <RowDefinition Height="65"/>
+                        <RowDefinition Height="55"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="149*"></ColumnDefinition>
+                            <ColumnDefinition Width="79*"/>
+                            <ColumnDefinition Width="164*"/>
+                            <ColumnDefinition Width="196*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Step 1: Select a source Excel file" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.667,1.13" Margin="15,4,0,0" Grid.ColumnSpan="2"/>
+                        <TextBox Grid.Column="0" Text="{Binding CommissionReportGeneratorViewModel.SourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="3"/>
+                        <Button Grid.Column="3" Content="Select Excel File" Command="{Binding CommissionReportGeneratorViewModel.OpenFileClicked}" Width="150" Margin="23,19,23,27" VerticalAlignment="Stretch"/>
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="-1,0,1,0" Grid.ColumnSpan="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.3*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Margin="0,0,36,0">
+                            <ComboBox ItemsSource="{Binding Path=CommissionReportGeneratorViewModel.MasterDealerIdentificationList, Mode=OneWay}" 
+                                      DisplayMemberPath="FullDealerIdentification" 
+                                      SelectedValue="{Binding CommissionReportGeneratorViewModel.SelectedSourceDealerCode}"
+                                      SelectedValuePath="FullDealerIdentification"
+                                      SelectedIndex="0"
+                                      HorizontalAlignment="Left" Margin="15,30,0,0" VerticalAlignment="Top" Width="240">
+                            </ComboBox>
+                            <Label Content="Step 2: Select a specific dealer OR [All Dealers]" HorizontalAlignment="Left" Margin="16,7,0,0" VerticalAlignment="Top"/>
+                        </Grid>
+                        <Label Content="Step 3: Enter the Week Number OR Range" Grid.Column="1" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top"/>
+                        <TextBox Grid.Column="1" Height="25" Width="100" RenderTransformOrigin="0.42,1.333" Margin="74,25,82,16" Text="{Binding CommissionReportGeneratorViewModel.WeekInput}"></TextBox>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Step 4: Select a destination path" HorizontalAlignment="Left" Margin="15,0,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+                        <TextBox Grid.Row="2" Text="{Binding Path=CommissionReportGeneratorViewModel.DestinationPath}" HorizontalAlignment="Left" Height="25" Margin="15,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="3"/>
+                        <Button Width="150" Content="Select Destination Path" Command="{Binding CommissionReportGeneratorViewModel.SelectDestinationPathClicked}" Grid.Column="1" Margin="23,16,23,10" VerticalAlignment="Stretch"/>
+                    </Grid>
+                    <Button Width="120" Content="Generate Reports" Command="{Binding CommissionReportGeneratorViewModel.GenerateReportsClicked}" Margin="24,37,424,-19" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1"/>
+                    <Label Content="Step 5: Generate the report(s)" HorizontalAlignment="Left" Margin="15,10,0,0" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+                    <Image HorizontalAlignment="Left" Height="48" Margin="406,27,0,-19" Grid.Row="3" VerticalAlignment="Top" Width="172" Source="/Media/digicomIcon.png"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

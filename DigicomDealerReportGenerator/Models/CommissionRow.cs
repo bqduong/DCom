@@ -32,7 +32,7 @@ namespace DigicomDealerReportGenerator.Models
 
         public string CustomerId { get; set; }
 
-        public string ActivationDate { get; set; }
+        public DateTime ActivationDate { get; set; }
 
         public string CustomerFirstName { get; set; }
 
@@ -54,6 +54,6 @@ namespace DigicomDealerReportGenerator.Models
 
         public string SubscriberCount { get; set; }
 
-        public string CommissionAmount { get; set; }
+        public double CommissionAmount { get; set; }
     }
 }
