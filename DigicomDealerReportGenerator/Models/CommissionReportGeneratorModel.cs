@@ -103,7 +103,7 @@ namespace DigicomDealerReportGenerator.Models
                                                                   CompleteTotal = Math.Round(sum, 2),
                                                                   Total = Math.Round(sum, 2), 
                                                                   IsCommission = true, 
-                                                                  IsTerminated = agent.ToString().Contains("terminated")
+                                                                  IsTerminated = agent.ToString().ToLower().Contains("terminated")
                                                               }).OrderBy(a => a.Agent).ToList();
 
             agents = masterResidualRows.GroupBy(m => new { m.Agent }).Select(g => g.Key).ToList();
@@ -119,7 +119,7 @@ namespace DigicomDealerReportGenerator.Models
                                            CompleteTotal = Math.Round(sum, 2),
                                            Total = Math.Round(sum, 2),
                                            IsCommission = false,
-                                           IsTerminated = agent.ToString().Contains("terminated")
+                                           IsTerminated = agent.ToString().ToLower().Contains("terminated")
                                        }).OrderBy(a => a.Agent).ToList();
 
             commissionTotalRows.AddRange(groupedResidualRows);
