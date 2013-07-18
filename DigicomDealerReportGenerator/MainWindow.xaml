@@ -153,7 +153,6 @@
                     </Grid>
                     <Button Width="120" Content="Generate Reports" Command="{Binding CommissionReportGeneratorViewModel.GenerateReportsClicked}" Margin="24,37,424,-19" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="1"/>
                     <Label Content="Step 5: Generate the report(s)" HorizontalAlignment="Left" Margin="15,10,0,0" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-                    <Image HorizontalAlignment="Left" Height="48" Margin="406,27,0,-19" Grid.Row="3" VerticalAlignment="Top" Width="172" Source="/Media/digicomIcon.png"/>
                 </Grid>
             </TabItem>
         </TabControl>
