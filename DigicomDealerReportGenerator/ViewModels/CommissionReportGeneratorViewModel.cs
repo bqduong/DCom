@@ -196,7 +196,7 @@ namespace DigicomDealerReportGenerator.ViewModels
         {
             var commissionReportGenerator = new CommissionReportGeneratorModel(this);
 
-            if (SelectedSourceDealerCode == "All")
+            if (SelectedSourceDealerCode == "[All Dealers]")
             {
                 var fullDealerIds =
                     this.MasterDealerIdentificationList.Where(m => m.DoorCode != "All").Select(m => m.FullDealerIdentification);
