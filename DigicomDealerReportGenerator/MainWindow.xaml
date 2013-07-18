@@ -16,13 +16,14 @@
                     <Grid Grid.Row="0" Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="149*"></ColumnDefinition>
-                            <ColumnDefinition Width="243*"/>
+                            <ColumnDefinition Width="79*"/>
+                            <ColumnDefinition Width="164*"/>
                             <ColumnDefinition Width="196*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Step 1: Select a source Excel file" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.667,1.13" Margin="15,4,0,0" Grid.ColumnSpan="2"/>
-                        <TextBox Grid.Column="0" Text="{Binding QualifiedDisqualifiedReportGeneratorViewModel.SourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="2"/>
-                        <CheckBox Grid.Column="0" IsChecked="{Binding Path=QualifiedDisqualifiedReportGeneratorViewModel.IsSoCalReport}" Content="Southern California Dealer Report" HorizontalAlignment="Left" Margin="15,53,0,0" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="2"/>
-                        <Button Grid.Column="2" Content="Select Excel File" Command="{Binding QualifiedDisqualifiedReportGeneratorViewModel.OpenFileClicked}" Width="150" Margin="23,19,23,27" VerticalAlignment="Stretch"/>
+                        <TextBox Grid.Column="0" Text="{Binding QualifiedDisqualifiedReportGeneratorViewModel.SourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="3"/>
+                        <CheckBox Grid.Column="0" IsChecked="{Binding Path=QualifiedDisqualifiedReportGeneratorViewModel.IsSoCalReport}" Content="Southern California Dealer Report" HorizontalAlignment="Left" Margin="15,53,0,0" VerticalAlignment="Top" Width="343" Grid.ColumnSpan="3"/>
+                        <Button Grid.Column="3" Content="Select Excel File" Command="{Binding QualifiedDisqualifiedReportGeneratorViewModel.OpenFileClicked}" Width="150" Margin="23,19,23,27" VerticalAlignment="Stretch"/>
                     </Grid>
                     <Grid Grid.Row="1" Margin="-1,0,1,0" Grid.ColumnSpan="3">
                         <Grid.ColumnDefinitions>
@@ -103,6 +104,10 @@
                         <Button Width="180" Height="30" Content="Process QPay Reports" Command="{Binding CallidusReportGeneratorViewModel.ProcessQPayReportsClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1"></Button>
                     </Grid>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Commission">
+               <Button Width="180" Height="30" Content="Load Source" Command="{Binding CommissionReportGeneratorViewModel.OpenFileClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1" Margin="10,17,6,59">
+                </Button>
             </TabItem>
         </TabControl>
     </Grid>

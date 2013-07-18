@@ -15,7 +15,7 @@ using LinqToExcel;
 
 namespace DigicomDealerReportGenerator.ViewModels
 {
-    public class CallidusReportGeneratorViewModel : BaseViewModel, INotifyPropertyChanged
+    public class CallidusReportGeneratorViewModel : BaseViewModel
     {
         private OpenFileDialog openFile;
 
@@ -26,8 +26,6 @@ namespace DigicomDealerReportGenerator.ViewModels
         private string soCalSourcePath;
 
         private DateTime dateSelect;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public CallidusReportGeneratorViewModel(string executionPath) : base(executionPath)
         {
@@ -226,14 +224,6 @@ namespace DigicomDealerReportGenerator.ViewModels
         protected void ProcessQPayReports(object param = null)
         {
             this.callidusReportGeneratorModel.ProcessQPayReports();   
-        }
-
-        private void NotifyPropertyChanged(String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

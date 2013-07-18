@@ -39,6 +39,7 @@ namespace DigicomDealerReportGenerator.ViewModels
             //dependency injection in the future
             this.QualifiedDisqualifiedReportGeneratorViewModel = new QualifiedDisqualifiedReportGeneratorViewModel(executionPath);
             this.CallidusReportGeneratorViewModel = new CallidusReportGeneratorViewModel(executionPath);
+            this.CommissionReportGeneratorViewModel = new CommissionReportGeneratorViewModel(executionPath);
         }
 
         #region Properties
@@ -46,6 +47,8 @@ namespace DigicomDealerReportGenerator.ViewModels
         public QualifiedDisqualifiedReportGeneratorViewModel QualifiedDisqualifiedReportGeneratorViewModel { get; set; }
 
         public CallidusReportGeneratorViewModel CallidusReportGeneratorViewModel { get; set; }
+
+        public CommissionReportGeneratorViewModel CommissionReportGeneratorViewModel { get; set; }
 
         #endregion Properties
 

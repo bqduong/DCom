@@ -62,5 +62,51 @@ namespace DigicomDealerReportGenerator.MappingHelper
             excel.AddMapping<ITransactionRow>(q => q.BoltOn, "Bolt On");
         }
 
+
+        public static void MapResidualRowToLinq(ref ExcelQueryFactory excel)
+        {
+            excel.AddMapping<ResidualRow>(r => r.Mrr, "MRR");  
+            excel.AddMapping<ResidualRow>(r => r.AccountId, "ACCOUNT_ID");
+            excel.AddMapping<ResidualRow>(r => r.ActivationDate, "ACTIVATION_DATE");
+            excel.AddMapping<ResidualRow>(r => r.CustomerId, "CUSTOMER_ID");
+            excel.AddMapping<ResidualRow>(r => r.MarketId, "MARKET_ID");  
+            excel.AddMapping<ResidualRow>(r => r.MarketName, "MARKET_NAME");  
+            excel.AddMapping<ResidualRow>(r => r.Technology, "TECHNOLOGY");  
+            excel.AddMapping<ResidualRow>(r => r.DealerId, "DEALER_ID");  
+            excel.AddMapping<ResidualRow>(r => r.DealerCode, "DEALER_CODE");  
+            excel.AddMapping<ResidualRow>(r => r.Mac, "MAC");
+            excel.AddMapping<ResidualRow>(r => r.Agent, "Agent");
+            excel.AddMapping<ResidualRow>(r => r.ResidualAmount, "RESIDUAL AMOUNT");
+            excel.AddMapping<ResidualRow>(r => r.RevenueClassName, "REVENUE_CLASS_NAME");  
+        }
+
+
+        public static void MapCommissionRowToLinq(ref ExcelQueryFactory excel)
+        {
+            excel.AddMapping<CommissionRow>(r => r.MarketId, "MARKET_ID");
+            excel.AddMapping<CommissionRow>(r => r.MarketName, "MARKET_NAME");
+            excel.AddMapping<CommissionRow>(r => r.LoginName, "LOGIN_NAME");
+            excel.AddMapping<CommissionRow>(r => r.DealerCode, "DEALER_CODE");
+            excel.AddMapping<CommissionRow>(r => r.DealerLocation, "DEALER_LOCATION");
+            excel.AddMapping<CommissionRow>(r => r.OicTransactionType, "OIC_TRANSACTION_TYPE");
+            excel.AddMapping<CommissionRow>(r => r.TransactionDate, "TRX_DATE");
+            excel.AddMapping<CommissionRow>(r => r.OfferId, "OFFER_ID");
+            excel.AddMapping<CommissionRow>(r => r.OfferName, "OFFER_NAME");
+            excel.AddMapping<CommissionRow>(r => r.ContractType, "CONTRACT_TYPE");
+            excel.AddMapping<CommissionRow>(r => r.AccountId, "ACCOUNT_ID");
+            excel.AddMapping<CommissionRow>(r => r.CustomerId, "CUSTOMER_ID");
+            excel.AddMapping<CommissionRow>(r => r.ActivationDate, "ACTIVATION_DATE");
+            excel.AddMapping<CommissionRow>(r => r.CustomerFirstName, "CUSTOMER_FIRST_NAME");
+            excel.AddMapping<CommissionRow>(r => r.CustomerLastName, "CUSTOMER_LAST_NAME");
+            excel.AddMapping<CommissionRow>(r => r.AccountAge, "ACCOUNT_AGE");
+            excel.AddMapping<CommissionRow>(r => r.ServiceType, "SERVICE_TYPE");
+            excel.AddMapping<CommissionRow>(r => r.BundleType, "BUNDLE_TYPE");
+            excel.AddMapping<CommissionRow>(r => r.EquipmentSerialNumber, "EQUIPMENT_SERIAL_NUMBER");
+            excel.AddMapping<CommissionRow>(r => r.Agent, "Agent");
+            excel.AddMapping<CommissionRow>(r => r.PlanElement, "PLAN_ELEMENT");
+            excel.AddMapping<CommissionRow>(r => r.RecurringPrice, "RECURRING_PRICE");
+            excel.AddMapping<CommissionRow>(r => r.SubscriberCount, "SUBSCRIBER_COUNT");
+            excel.AddMapping<CommissionRow>(r => r.CommissionAmount, "COMMISSION_AMOUNT");
+        }
     }
 }

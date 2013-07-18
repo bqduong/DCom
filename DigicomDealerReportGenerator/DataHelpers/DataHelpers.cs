@@ -223,6 +223,31 @@ namespace DigicomDealerReportGenerator
         }
 
 
+        public static List<IDealerIdentification> GenerateAgentListWithDealerCode(IEnumerable<CommissionRow> masterList)
+        {
+            var distinctItems = masterList.GroupBy(i => new { i.DealerCode, i.Agent }).Select(g => g.Key).ToList();
+            var distinctDealers = new List<IDealerIdentification>();
+
+            distinctDealers.Add(new DealerIdentification()
+            {
+                DoorCode = "All",
+                DoorName = "All",
+                FullDealerIdentification = "[All Dealers]"
+            });
+
+            distinctDealers.AddRange(distinctItems
+                .Select(distinctItem => new DealerIdentification()
+                {
+                    DoorCode = distinctItem.DealerCode,
+                    DoorName = distinctItem.Agent,
+                    FullDealerIdentification = distinctItem.DealerCode + " - " + distinctItem.Agent
+                })
+                .Cast<IDealerIdentification>().ToList());
+
+            return distinctDealers;
+        }
+
+
         public static IEnumerable<ITransactionRow> GetMasterListOfTransactionRows(bool isQualified, ExcelQueryFactory excel)
         {
             if (isQualified)
@@ -237,6 +262,12 @@ namespace DigicomDealerReportGenerator
                 validRows.RemoveAll(v => v.DoorCode == null);
                 return validRows;
             }
+        }
+
+        public static IEnumerable<CommissionRow> GetMasterListOfCommissionRows(ExcelQueryFactory excel)
+        {
+            var validRows = (from x in excel.Worksheet<CommissionRow>("Commission Payout") select x).ToList();
+            return validRows;
         }
     }
 }

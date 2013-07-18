@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v12.2, Version=12.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v12.2.Core, Version=12.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v12.2, Version=12.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v12.2, Version=12.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="EPPlus">
       <HintPath>..\packages\EPPlus.3.1.3.3\lib\net35\EPPlus.dll</HintPath>
     </Reference>
@@ -89,16 +93,21 @@
     <Compile Include="DataHelpers\DataHelpers.cs" />
     <Compile Include="FormattingHelper\FormatHelper.cs" />
     <Compile Include="MappingHelper\LinqToExcelMappingHelpers.cs" />
+    <Compile Include="Models\CommissionReportGeneratorModel.cs" />
+    <Compile Include="Models\CommissionRow.cs" />
+    <Compile Include="Models\CommissionTotalRow.cs" />
     <Compile Include="Models\DealerIdentification.cs" />
     <Compile Include="Models\DisqualifiedTransactionRow.cs" />
     <Compile Include="Models\IDealerIdentification.cs" />
     <Compile Include="Models\ITransactionRow.cs" />
     <Compile Include="Models\QualifiedTransactionRow.cs" />
+    <Compile Include="Models\ResidualRow.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Models\CallidusReportGeneratorModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CallidusReportGeneratorViewModel.cs" />
     <Compile Include="Models\QualifiedDisqualifiedReportGeneratorModel.cs" />
+    <Compile Include="ViewModels\CommissionReportGeneratorViewModel.cs" />
     <Compile Include="ViewModels\QualifiedDisqualifiedReportGeneratorViewModel.cs" />
     <Compile Include="ViewModels\DigicomReportGeneratorViewModel.cs" />
     <Page Include="MainWindow.xaml">
