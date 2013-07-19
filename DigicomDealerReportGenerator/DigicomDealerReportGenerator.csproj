@@ -93,7 +93,7 @@
     <Compile Include="DataHelpers\DataHelpers.cs" />
     <Compile Include="FormattingHelper\FormatHelper.cs" />
     <Compile Include="MappingHelper\LinqToExcelMappingHelpers.cs" />
-    <Compile Include="Models\CommissionReportGeneratorModel.cs" />
+    <Compile Include="Models\CommissionResidualReportGeneratorModel.cs" />
     <Compile Include="Models\CommissionRow.cs" />
     <Compile Include="Models\CommissionTotalRow.cs" />
     <Compile Include="Models\DealerIdentification.cs" />
@@ -107,7 +107,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CallidusReportGeneratorViewModel.cs" />
     <Compile Include="Models\QualifiedDisqualifiedReportGeneratorModel.cs" />
-    <Compile Include="ViewModels\CommissionReportGeneratorViewModel.cs" />
+    <Compile Include="ViewModels\CommissionResidualReportGeneratorViewModel.cs" />
     <Compile Include="ViewModels\QualifiedDisqualifiedReportGeneratorViewModel.cs" />
     <Compile Include="ViewModels\DigicomReportGeneratorViewModel.cs" />
     <Page Include="MainWindow.xaml">

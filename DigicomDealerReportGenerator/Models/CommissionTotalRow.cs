@@ -10,9 +10,9 @@ namespace DigicomDealerReportGenerator.Models
     {
         public string Agent { get; set; }
 
-        public double Total { get; set; }
+        public decimal Total { get; set; }
 
-        public double CompleteTotal { get; set; }
+        public decimal CompleteTotal { get; set; }
 
         public bool IsTerminated { get; set; }
 

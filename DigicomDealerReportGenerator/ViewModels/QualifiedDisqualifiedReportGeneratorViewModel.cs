@@ -125,7 +125,7 @@ namespace DigicomDealerReportGenerator.ViewModels
                 if (value != this.masterDealerIdentificationList)
                 {
                     this.masterDealerIdentificationList = value;
-                    this.NotifyPropertyChanged("MasterDealerIdentificationList");
+                    this.NotifyPropertyChanged("MasterCommissionDealerIdentificationList");
                 }
             }
         }

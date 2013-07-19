@@ -54,6 +54,6 @@ namespace DigicomDealerReportGenerator.Models
 
         public string SubscriberCount { get; set; }
 
-        public double CommissionAmount { get; set; }
+        public decimal CommissionAmount { get; set; }
     }
 }

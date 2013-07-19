@@ -11,36 +11,51 @@ using OfficeOpenXml;
 
 namespace DigicomDealerReportGenerator.Models
 {
-    public class CommissionReportGeneratorModel
+    public class CommissionResidualReportGeneratorModel
     {
-        public CommissionReportGeneratorModel(CommissionReportGeneratorViewModel commissionReportGeneratorViewModel)
+        public CommissionResidualReportGeneratorModel(CommissionResidualReportGeneratorViewModel commissionReportGeneratorViewModel)
         {
             this.CommissionReportGeneratorViewModel = commissionReportGeneratorViewModel;
         }
 
-        public CommissionReportGeneratorViewModel CommissionReportGeneratorViewModel { get; set; }
+        public CommissionResidualReportGeneratorViewModel CommissionReportGeneratorViewModel { get; set; }
 
-        public void GenerateSingleReport(string fullDealerId, ExcelPackage package)
+        public void GenerateSingleCommissionReport(string fullDealerId, ExcelPackage package)
         {
-            var commissionTotalRows =
-                this.GenerateCommissionTotalRows(
-                    this.CommissionReportGeneratorViewModel.MasterTransactionList,
-                    this.CommissionReportGeneratorViewModel.MasterResidualTransactionList);
-
             var fullDealerSplit = fullDealerId.Split(new char[]{'-'}, 2);
             var reportDataRows =
-                this.CommissionReportGeneratorViewModel.MasterTransactionList.Where(m => m.DealerCode.Trim() == fullDealerSplit[0].Trim() && m.Agent.Trim() == fullDealerSplit[1].Trim())
+                this.CommissionReportGeneratorViewModel.MasterCommissionTransactionList.Where(m => m.DealerCode.Trim() == fullDealerSplit[0].Trim() && m.Agent.Trim() == fullDealerSplit[1].Trim())
                     .ToList();
 
             if (reportDataRows.Any())
             {
-                var worksheet = this.AppendReportData(reportDataRows, package);
+                var worksheet = this.AppendCommissionReportData(reportDataRows, package);
                 this.SaveReportFile(reportDataRows.FirstOrDefault(), worksheet, this.CommissionReportGeneratorViewModel.DestinationPath);
             }
         }
 
 
-        protected ExcelWorksheet AppendReportData(
+        public void GenerateSingleResidualReport(string fullDealerId, ExcelPackage package)
+        {
+            //test
+            var commissionTotalRows =
+                this.GenerateCommissionTotalRows(
+                    this.CommissionReportGeneratorViewModel.MasterCommissionTransactionList,
+                    this.CommissionReportGeneratorViewModel.MasterResidualTransactionList);
+
+            var fullDealerSplit = fullDealerId.Split(new char[] { '-' }, 2);
+            var reportDataRows =
+                this.CommissionReportGeneratorViewModel.MasterResidualTransactionList.Where(m => m.DealerId.Trim() == fullDealerSplit[0].Trim() && m.Agent.Trim() == fullDealerSplit[1].Trim())
+                    .ToList();
+
+            if (reportDataRows.Any())
+            {
+                var worksheet = this.AppendResidualReportData(reportDataRows, package);
+                this.SaveResidualReportFile(reportDataRows.FirstOrDefault(), worksheet, this.CommissionReportGeneratorViewModel.DestinationPath);
+            }
+        }
+
+        protected ExcelWorksheet AppendCommissionReportData(
             IEnumerable<CommissionRow> reportDataRows, ExcelPackage package)
         {
             var worksheet = package.Workbook.Worksheets[1];
@@ -61,10 +76,58 @@ namespace DigicomDealerReportGenerator.Models
                 }
             }
 
-            var sumTotal = rows.Select(r => r.CommissionAmount).Sum();
+            var sumTotal = rows.Select(r => Math.Round(r.CommissionAmount, 2)).Sum();
             worksheet.SetValue(rows.Count + startRow, properties.Count(), "$" + String.Format("{0:0.00}", sumTotal));
 
             return worksheet;
+        }
+
+        protected ExcelWorksheet AppendResidualReportData(IEnumerable<ResidualRow> reportDataRows, ExcelPackage package)
+        {
+            var worksheet = package.Workbook.Worksheets[1];
+            worksheet.Cells.Style.Font.Size = 10;
+
+            var rows = reportDataRows.Select(transactionRow => transactionRow as ResidualRow).ToList();
+            var properties = new ResidualRow().GetType().GetProperties();
+
+            var startRow = worksheet.Dimension.End.Row + 1;
+            for (int i = 0; i < rows.Count; i++)
+            {
+                for (int j = 1; j < properties.Length + 1; j++)
+                {
+                    var value = rows[i].GetType().GetProperty(properties[j - 1].Name).GetValue(rows[i], null);
+                    value = DataHelpers.GetDateString(value);
+                    value = DataHelpers.ReturnCurrencyString(value);
+                    worksheet.SetValue(i + startRow, j, value);
+                }
+            }
+
+            var sumTotal = rows.Select(r =>  Math.Round(r.ResidualAmount, 2)).Sum();
+            worksheet.SetValue(rows.Count + startRow, properties.Count() - 1, "$" + String.Format("{0:0.00}", sumTotal));
+
+            return worksheet;
+        }
+
+        protected void SaveResidualReportFile(
+            ResidualRow reportDataRow,
+            ExcelWorksheet worksheet,
+            string destinationPath)
+        {
+            var fileName = /*reportDataRow.DealerCode + " - " + */reportDataRow.Agent + " - Residual Report - Week " + this.CommissionReportGeneratorViewModel.WeekInput + ".xlsx";
+            fileName = fileName.Replace("/", " ");
+            fileName = fileName.Replace(":", " ");
+
+            var filePath = new FileInfo(destinationPath + "\\" + fileName);
+
+            if (File.Exists(destinationPath + "\\" + fileName))
+            {
+                File.Delete(destinationPath + "\\" + fileName);
+            }
+
+            ExcelPackage reportPackage = new ExcelPackage(filePath);
+            reportPackage.Workbook.Worksheets.Add("Report", worksheet);
+            reportPackage.Save();
+            reportPackage.Dispose();
         }
 
         protected void SaveReportFile(

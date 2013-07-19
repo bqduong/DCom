@@ -30,7 +30,7 @@ namespace DigicomDealerReportGenerator.Models
 
         public string Agent { get; set; }
 
-        public double ResidualAmount { get; set; }
+        public decimal ResidualAmount { get; set; }
 
         public string RevenueClassName { get; set; }
     }

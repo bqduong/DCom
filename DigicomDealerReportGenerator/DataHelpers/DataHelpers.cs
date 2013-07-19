@@ -249,6 +249,32 @@ namespace DigicomDealerReportGenerator
             return distinctDealers;
         }
 
+        public static List<IDealerIdentification> GenerateAgentListWithDealerCode(IEnumerable<ResidualRow> masterList)
+        {
+            var distinctItems = masterList.GroupBy(i => new { i.DealerId, i.Agent }).Select(g => g.Key).ToList();
+            var distinctDealers = new List<IDealerIdentification>();
+
+            distinctDealers.Add(new DealerIdentification()
+            {
+                DoorCode = "All",
+                DoorName = "All",
+                FullDealerIdentification = "[All Dealers]"
+            });
+
+            distinctDealers.AddRange(distinctItems
+                .Select(distinctItem => new DealerIdentification()
+                {
+                    DoorCode = distinctItem.DealerId,
+                    DoorName = distinctItem.Agent,
+                    FullDealerIdentification = distinctItem.DealerId + " - " + distinctItem.Agent
+                })
+                .Cast<IDealerIdentification>().OrderBy(d => d.DoorName).ToList());
+
+            distinctDealers.RemoveAll(d => d.DoorCode == null && d.DoorName == null);
+
+            return distinctDealers;
+        }
+
 
         public static IEnumerable<ITransactionRow> GetMasterListOfTransactionRows(bool isQualified, ExcelQueryFactory excel)
         {
