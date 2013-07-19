@@ -27,9 +27,9 @@ namespace DigicomDealerReportGenerator.Models
                     this.CommissionReportGeneratorViewModel.MasterTransactionList,
                     this.CommissionReportGeneratorViewModel.MasterResidualTransactionList);
 
-            var fullDealerSplit = fullDealerId.Split('-');
+            var fullDealerSplit = fullDealerId.Split(new char[]{'-'}, 2);
             var reportDataRows =
-                this.CommissionReportGeneratorViewModel.MasterTransactionList.Where(m => m.DealerCode == fullDealerSplit[0].Trim() && m.Agent == fullDealerSplit[1].Trim())
+                this.CommissionReportGeneratorViewModel.MasterTransactionList.Where(m => m.DealerCode.Trim() == fullDealerSplit[0].Trim() && m.Agent.Trim() == fullDealerSplit[1].Trim())
                     .ToList();
 
             if (reportDataRows.Any())
@@ -72,8 +72,9 @@ namespace DigicomDealerReportGenerator.Models
             ExcelWorksheet worksheet,
             string destinationPath)
         {
-            var fileName = reportDataRow.DealerCode + " - " + reportDataRow.Agent + " - Commission Report - Week " + this.CommissionReportGeneratorViewModel.WeekInput + ".xlsx";
+            var fileName = /*reportDataRow.DealerCode + " - " + */reportDataRow.Agent + " - Commission Report - Week " + this.CommissionReportGeneratorViewModel.WeekInput + ".xlsx";
             fileName = fileName.Replace("/", " ");
+            fileName = fileName.Replace(":", " ");
 
             var filePath = new FileInfo(destinationPath + "\\" + fileName);
 
