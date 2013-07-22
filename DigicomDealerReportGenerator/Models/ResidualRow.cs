@@ -12,7 +12,7 @@ namespace DigicomDealerReportGenerator.Models
 
         public string AccountId { get; set; }
 
-        public string ActivationDate { get; set; }
+        public DateTime ActivationDate { get; set; }
 
         public string CustomerId { get; set; }
 

@@ -110,7 +110,7 @@ namespace DigicomDealerReportGenerator
 
         public static dynamic ReturnCurrencyString(dynamic value)
         {
-            return value is double ? "$" + String.Format("{0:0.00}", value) : value;
+            return value is decimal ? "$" + String.Format("{0:0.00}", value) : value;
         }
 
 
