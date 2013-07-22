@@ -285,7 +285,7 @@ namespace DigicomDealerReportGenerator.ViewModels
             if (SelectedResidualSourceDealerCode == "[All Dealers]")
             {
                 var fullDealerIds =
-                    this.MasterCommissionDealerIdentificationList.Where(m => m.DoorCode != "All").Select(m => m.FullDealerIdentification);
+                    this.MasterResidualDealerIdentificationList.Where(m => m.DoorCode != "All").Select(m => m.FullDealerIdentification);
 
                 foreach (var fullDealerId in fullDealerIds)
                 {

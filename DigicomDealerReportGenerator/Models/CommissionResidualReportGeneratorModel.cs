@@ -37,12 +37,6 @@ namespace DigicomDealerReportGenerator.Models
 
         public void GenerateSingleResidualReport(string fullDealerId, ExcelPackage package)
         {
-            //test
-            var commissionTotalRows =
-                this.GenerateCommissionTotalRows(
-                    this.CommissionReportGeneratorViewModel.MasterCommissionTransactionList,
-                    this.CommissionReportGeneratorViewModel.MasterResidualTransactionList);
-
             var fullDealerSplit = fullDealerId.Split(new char[] { '-' }, 2);
             var reportDataRows =
                 this.CommissionReportGeneratorViewModel.MasterResidualTransactionList.Where(m => m.DealerId.Trim() == fullDealerSplit[0].Trim() && m.Agent.Trim() == fullDealerSplit[1].Trim())
