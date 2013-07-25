@@ -100,11 +100,11 @@ namespace DigicomDealerReportGenerator.FormattingHelper
             //            : System.Drawing.Color.FromArgb(177, 160, 199));
             //}
 
-            worksheet.SetValue(17, 17, DataHelpers.GetStartingMonthAndYear(startDate));
+            worksheet.SetValue(isSoCalReport ? 17 : 18, 17, DataHelpers.GetStartingMonthAndYear(startDate));
         }
 
         public static void FormatQualifiedReport(ref ExcelWorksheet worksheet, DateTime startDate, 
-                                                 double sumTotal, int startRow, PropertyInfo[] properties, 
+                                                 decimal sumTotal, int startRow, PropertyInfo[] properties, 
                                                  List<QualifiedTransactionRow> rows, bool isSoCalReport)
         {
             worksheet.SetValue(isSoCalReport ? 4 : 2, 17, DataHelpers.GetStartingMonthAndYear(startDate));

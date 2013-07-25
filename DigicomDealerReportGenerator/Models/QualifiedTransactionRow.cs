@@ -42,7 +42,7 @@ namespace DigicomDealerReportGenerator.Models
 
         public string BoltOnAmount { get; set; }
 
-        public double TransactionAmount { get; set; }
+        public decimal TransactionAmount { get; set; }
 
         public DateTime PostedDate { get; set; }
     }
