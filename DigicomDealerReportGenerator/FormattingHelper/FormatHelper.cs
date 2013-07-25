@@ -30,7 +30,7 @@ namespace DigicomDealerReportGenerator.FormattingHelper
             {
                 worksheet.SetValue(1, 4, "Disqualified Transaction Report");
             }
-            
+
             worksheet.Cells[2 + soCalOffset, 2].Style.Font.Size = 9;
             worksheet.Cells[3 + soCalOffset, 1].Style.Font.Size = 9;
             worksheet.Cells[3 + soCalOffset, 2].Style.Font.Size = 9;
@@ -89,6 +89,8 @@ namespace DigicomDealerReportGenerator.FormattingHelper
             worksheet.SetValue(2 + soCalOffset, 2, "Business Rule Reason Code Legend");
             worksheet.SetValue(15 + soCalOffset, 1, "The transactions listed below do not qualify for payment per the Dealer Compensation Business Rules");
 
+
+            //was here before
             //for (int i = 1; i < 19; i++)
             //{
             //    worksheet.Cells[3 + soCalOffset, i].Style.Fill.PatternType = ExcelFillStyle.Solid;
