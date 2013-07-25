@@ -125,7 +125,7 @@ namespace DigicomDealerReportGenerator.ViewModels
                 if (value != this.masterDealerIdentificationList)
                 {
                     this.masterDealerIdentificationList = value;
-                    this.NotifyPropertyChanged("MasterCommissionDealerIdentificationList");
+                    this.NotifyPropertyChanged("MasterDealerIdentificationList");
                 }
             }
         }
@@ -272,8 +272,6 @@ namespace DigicomDealerReportGenerator.ViewModels
         protected void GenerateReports(object param = null)
         {
             var dealerReportGenerator = new QualifiedDisqualifiedReportGeneratorModel(this);
-
-            var t = DataHelpers.AdjustTransactionDates(this.MasterTransactionList, new DateTime(2013, 6, 15));
 
             if (SelectedSourceDealerDoorCode == "All")
             {
