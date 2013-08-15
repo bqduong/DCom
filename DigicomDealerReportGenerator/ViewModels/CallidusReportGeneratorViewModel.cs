@@ -25,6 +25,10 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         private string soCalSourcePath;
 
+        private string qPayRetailMasterSourcePath;
+
+        private string qPayOnlineMasterSourcePath;
+
         private DateTime dateSelect;
 
         public CallidusReportGeneratorViewModel(string executionPath) : base(executionPath)
@@ -63,6 +67,39 @@ namespace DigicomDealerReportGenerator.ViewModels
                 }
             }
         }
+
+
+        public string QPayRetailMasterSourcePath
+        {
+            get
+            {
+                return this.qPayRetailMasterSourcePath;
+            }
+            set
+            {
+                if (value != this.qPayRetailMasterSourcePath)
+                {
+                    this.qPayRetailMasterSourcePath = value;
+                    this.NotifyPropertyChanged("QPayRetailMasterSourcePath");
+                }
+            }
+        }
+
+        public string QPayOnlineMasterSourcePath
+        {
+            get
+            {
+                return this.qPayOnlineMasterSourcePath;
+            }
+            set
+            {
+                if (value != this.qPayOnlineMasterSourcePath)
+                {
+                    this.qPayOnlineMasterSourcePath = value;
+                    this.NotifyPropertyChanged("QPayOnlineMasterSourcePath");
+                }
+            }
+        }
         
         public DateTime DateSelect
         {
@@ -93,7 +130,7 @@ namespace DigicomDealerReportGenerator.ViewModels
         {
             get
             {
-                return new SimpleCommand(this.LoadBayAreaFile);
+                return new SimpleCommand(this.LoadSoCalFile);
             }
         }
 
@@ -179,14 +216,8 @@ namespace DigicomDealerReportGenerator.ViewModels
                 try
                 {
                     var sourcePath = this.openFile.FileName;
-                    this.Excel = new ExcelQueryFactory(sourcePath);
-                    LinqToExcelMappingHelpers.MapToLinq(ref this.Excel, DataHelpers.GetReportType, sourcePath);
-
-                    //populate data list
-                    var isQualified = DataHelpers.IsQualified(sourcePath);
-                    this.callidusReportGeneratorModel.MasterSoCalTransactionList = DataHelpers.GetMasterListOfTransactionRows(isQualified, this.Excel);
-
-                    this.SoCalSourcePath = sourcePath;
+                    this.callidusReportGeneratorModel.RetailMasterFilePath = sourcePath;
+                    this.QPayRetailMasterSourcePath = sourcePath;
                 }
                 catch (Exception e)
                 {
@@ -204,14 +235,8 @@ namespace DigicomDealerReportGenerator.ViewModels
                 try
                 {
                     var sourcePath = this.openFile.FileName;
-                    this.Excel = new ExcelQueryFactory(sourcePath);
-                    LinqToExcelMappingHelpers.MapToLinq(ref this.Excel, DataHelpers.GetReportType, sourcePath);
-
-                    //populate data list
-                    var isQualified = DataHelpers.IsQualified(sourcePath);
-                    this.callidusReportGeneratorModel.MasterSoCalTransactionList = DataHelpers.GetMasterListOfTransactionRows(isQualified, this.Excel);
-
-                    this.SoCalSourcePath = sourcePath;
+                    this.callidusReportGeneratorModel.RetailOnlineMasterFilePath = sourcePath;
+                    this.QPayOnlineMasterSourcePath = sourcePath;
                 }
                 catch (Exception e)
                 {

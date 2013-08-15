@@ -38,6 +38,8 @@ namespace DigicomDealerReportGenerator.MappingHelper
 
         public static void ModifyQualilfiedTransactionRowMappings(ref ExcelQueryFactory excel)
         {
+
+            excel.AddMapping<QualifiedTransactionRow>(q => q.Location, "Location");
             excel.AddMapping<QualifiedTransactionRow>(q => q.RatePlanAmount, "Rate Plan Amount");
             excel.AddMapping<QualifiedTransactionRow>(q => q.BoltOnAmount, "Bolt On Amount");
             excel.AddMapping<QualifiedTransactionRow>(q => q.TransactionAmount, "Transaction Amount");

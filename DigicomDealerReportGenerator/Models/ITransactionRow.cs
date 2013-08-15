@@ -13,7 +13,7 @@ namespace DigicomDealerReportGenerator.Models
         string DoorName { get; set; }
 
         string Address { get; set; }
-
+        
         string AccountNo { get; set; }
 
         string SubscriberId { get; set; }
