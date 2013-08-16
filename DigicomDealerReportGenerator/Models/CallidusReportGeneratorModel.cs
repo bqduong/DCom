@@ -71,9 +71,9 @@ namespace DigicomDealerReportGenerator.Models
                     var distinctLocations = this.GetDistinctLocations(adjustedBayAreaData);
 
                     var dealerListData = new List<dynamic>();
+                    var dateList = this.GetAllDatesInMonth(this.DateSelect.Year, this.DateSelect.Month);
                     foreach (var distinctLocation in distinctLocations)
                     {
-                        var dateList = this.GetAllDatesInMonth(2013, 6);
                         var dailySumList = new List<dynamic>();
                         dailySumList.Add(distinctLocation);
                         foreach (var dateTime in dateList)
@@ -85,12 +85,79 @@ namespace DigicomDealerReportGenerator.Models
 
                     ExcelPackage master = new ExcelPackage(new FileInfo(this.RetailMasterFilePath));
                     var masterWorksheet = master.Workbook.Worksheets[7];
-                    masterWorksheet.SetValue(5, 2, dealerListData.First()[1]);
+                    this.SetAllDatesOnWorksheet(ref masterWorksheet, dateList);
+                    this.SetAllNorCalReimbursementAmountsOnWorksheet(ref masterWorksheet, dateList, dealerListData);
                     master.Save();
                     master.Dispose();
 
                     var worksheet = this.AppendReportData(adjustedBayAreaData, package, this.DateSelect);
                     this.SaveExcelFile(worksheet, new FileInfo("C:\\test.xlsx"));
+                }
+            }
+        }
+
+        private void SetAllNorCalReimbursementAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
+        {
+            var reimbursementRows = new List<int> { 5, 9, 13, 17, 21, 25 };
+            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord", "Salinas" };
+
+
+            foreach (var location in locations)
+            {
+                var row = this.GetCorrespondingRowForLocation(location);
+                var data = this.GetCorrespondingRowDataForLocation(location, sumData);
+                foreach (var date in dateList)
+                {
+                    worksheet.SetValue(row, date.Day + 1, data[date.Day]);
+                }
+            }
+        }
+
+        public dynamic GetCorrespondingRowDataForLocation(string location, List<dynamic> sumData)
+        {
+            var data = new List<dynamic>();
+            foreach (var o in sumData)
+            {
+                if (o[0] == location)
+                {
+                    data = o;
+                }
+            }
+            return data;
+        }
+
+        //horrible hack to get corresponding row - use enums when refactoring
+        public int GetCorrespondingRowForLocation(string location)
+        {
+            switch (location)
+            {
+                case "Fruitvale":
+                    return 5;
+                case "San Jose":
+                    return 9;
+                case "Hayward":
+                    return 13;
+                case "Concord":
+                    return 17;
+                case "Salinas":
+                    return 21;
+                
+                default:
+                    return 5;
+            }
+        }
+
+
+
+        private void SetAllDatesOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList)
+        {
+            var dateRows = new List<int> { 3, 7, 11, 15, 19, 23, 29, 33, 37, 41, 45, 49, 53, 58 };
+
+            foreach (var dateRow in dateRows)
+            {
+                foreach (var date in dateList)
+                {
+                    worksheet.SetValue(dateRow, date.Day + 1, date.ToShortDateString());
                 }
             }
         }
