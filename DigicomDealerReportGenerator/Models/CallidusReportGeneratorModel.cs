@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -31,7 +32,7 @@ namespace DigicomDealerReportGenerator.Models
 
         public void ProcessQPayReports()
         {
-            //this.CreateAdjustedCrystalReportsFile(false);
+            this.CreateAdjustedCrystalReportsFile(false);
             this.CreateAdjustedCrystalReportsFile(true);
             MessageBox.Show("Callidus complete.");
         }
@@ -76,7 +77,10 @@ namespace DigicomDealerReportGenerator.Models
                     master.Dispose();
 
                     var worksheet = this.AppendReportData(adjustedSoCalData, package, this.DateSelect);
-                    this.SaveExcelFile(worksheet, new FileInfo("C:\\DCom\\testSocal.xlsx"));
+                    var fileName = "CrystalReportViewer - LA Retail " +
+                                   CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(this.DateSelect.Month) + " " +
+                                   this.DateSelect.Year + ".xlsx";
+                    this.SaveExcelFile(worksheet, new FileInfo(CallidusReportGeneratorViewModel.DestinationPath + "\\" + fileName));
                 }
             }
             else
@@ -117,7 +121,10 @@ namespace DigicomDealerReportGenerator.Models
                     master.Dispose();
 
                     var worksheet = this.AppendReportData(adjustedBayAreaData, package, this.DateSelect);
-                    this.SaveExcelFile(worksheet, new FileInfo("C:\\DCom\\testNorCal.xlsx"));
+                    var fileName = "CrystalReportViewer - Bay Retail " +
+                                   CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(this.DateSelect.Month) + " " +
+                                   this.DateSelect.Year + ".xlsx";
+                    this.SaveExcelFile(worksheet, new FileInfo(CallidusReportGeneratorViewModel.DestinationPath + "\\" + fileName));
                 }
             }
         }

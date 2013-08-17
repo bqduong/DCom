@@ -73,7 +73,7 @@
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Step 1: Load the Crystal Report files for the Bay Area and SoCal" Margin="15,10,42,69"></Label>
+                        <Label Grid.Column="0" Content="Step 1: Load the Crystal Report files for the Bay Area and SoCal" Margin="15,10,10,69"></Label>
                         <TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.BayAreaSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
                         <TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.SoCalSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
                         <Button Content="Load Bay Area File" Command="{Binding CallidusReportGeneratorViewModel.LoadBayAreaFileClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1" Margin="10,37,25,46"/>
@@ -84,7 +84,7 @@
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Step 2: Load the QPay (Retail Stores) MASTER SPREADSHEET" Margin="16,1,34,81"/>
+                        <Label Grid.Column="0" Content="Step 2: Load the QPay (Retail Stores) MASTER SPREADSHEET" Margin="16,-3,34,81"/>
                         <TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.QPayRetailMasterSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
                         <!--<Label Grid.Column="0" Content="Step 3: Load the QPay (Online Summary) MASTER SPREADSHEET" Margin="16,51,34,32" Height="23"/>-->
                         <!--<TextBox Grid.Column="0" Text="{Binding CallidusReportGeneratorViewModel.QPayOnlineMasterSourcePath}" HorizontalAlignment="Left" Height="23" Margin="15,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>-->
@@ -95,10 +95,12 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                             <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Step 3: Select the 1st of the month for reports:" Margin="16,-54,39,89"/>
                         <DatePicker Grid.Column="0" Margin="16,-31,171,69" SelectedDate="{Binding CallidusReportGeneratorViewModel.DateSelect}"></DatePicker>
+                        <Label Content="Step 4: Select a destination path" HorizontalAlignment="Left" Margin="15,3,0,0" VerticalAlignment="Top"/>
+                        <TextBox Text="{Binding Path=CallidusReportGeneratorViewModel.DestinationPath}" HorizontalAlignment="Left" Height="25" Margin="15,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343"/>
+                        <Button Width="150" Content="Select Destination Path" Command="{Binding CallidusReportGeneratorViewModel.SelectDestinationPathClicked}" Grid.Column="1" Margin="23,16,23,10" VerticalAlignment="Stretch"/>
                     </Grid>
                     <Grid Grid.Row="3">
                         <Button Width="180" Height="30" Content="Process QPay Reports" Command="{Binding CallidusReportGeneratorViewModel.ProcessQPayReportsClicked}" RenderTransformOrigin="0.326,0.631" Grid.Column="1"></Button>

@@ -29,6 +29,8 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         private string qPayOnlineMasterSourcePath;
 
+        private string destinationPath;
+
         private DateTime dateSelect;
 
         public CallidusReportGeneratorViewModel(string executionPath) : base(executionPath)
@@ -118,6 +120,27 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
         }
 
+        public string DestinationPath
+        {
+            get { return this.destinationPath; }
+            set
+            {
+                if (value != this.destinationPath)
+                {
+                    this.destinationPath = value;
+                    this.NotifyPropertyChanged("DestinationPath");
+                }
+            }
+        }
+
+        public ICommand SelectDestinationPathClicked
+        {
+            get
+            {
+                return new SimpleCommand(this.SetDestinationPath);
+            }
+        }
+
         public ICommand LoadBayAreaFileClicked
         {
             get
@@ -155,6 +178,16 @@ namespace DigicomDealerReportGenerator.ViewModels
             get
             {
                 return new SimpleCommand(this.ProcessQPayReports);
+            }
+        }
+
+        protected void SetDestinationPath(object param = null)
+        {
+            var dialog = new FolderBrowserDialog();
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                this.DestinationPath = dialog.SelectedPath;
             }
         }
 
