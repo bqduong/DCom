@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Windows.Forms;
 using DigicomDealerReportGenerator.FormattingHelper;
 using DigicomDealerReportGenerator.ViewModels;
 
@@ -31,14 +31,9 @@ namespace DigicomDealerReportGenerator.Models
 
         public void ProcessQPayReports()
         {
-            //overwrite or create new source data file (crystalReportViewer file)
-            this.CreateAdjustedCrystalReportsFile(false);
-
-            //write function that returns number of days in the specified month
-
-            //filter by city per day
-
-            var date = CallidusReportGeneratorViewModel.DateSelect;
+            //this.CreateAdjustedCrystalReportsFile(false);
+            this.CreateAdjustedCrystalReportsFile(true);
+            MessageBox.Show("Callidus complete.");
         }
 
         protected void CreateAdjustedCrystalReportsFile(bool isSoCalReport)
@@ -49,17 +44,39 @@ namespace DigicomDealerReportGenerator.Models
                 {
                     var adjustedSoCalData = this.CreateAdjustedReportData(this.MasterSoCalTransactionList, this.DateSelect);
 
-                    var testDate = new DateTime(2013, 6, 1);
-                    var sum = adjustedSoCalData.Select(a => a as QualifiedTransactionRow)
-                                     .ToList()
-                                     .Where(q => q.Location == "Fruitvale" && q.TransactionDate.Equals(testDate))
-                                     .Select(qa => qa.TransactionAmount)
-                                     .Sum();
+                    var distinctLocations = this.GetDistinctLocations(adjustedSoCalData);
 
+                    var dealerListData = new List<dynamic>();
+                    var dateList = this.GetAllDatesInMonth(this.DateSelect.Year, this.DateSelect.Month);
+                    foreach (var distinctLocation in distinctLocations)
+                    {
+                        var dailySumList = new List<dynamic>();
+                        dailySumList.Add(distinctLocation);
+                        foreach (var dateTime in dateList)
+                        {
+                            dailySumList.Add(this.GetSumPerLocationPerDay(distinctLocation, dateTime, adjustedSoCalData));
+                        }
 
+                        dealerListData.Add(dailySumList);
+                    }
+
+                    //var dailySumList2 = new List<dynamic>();
+                    //dailySumList2.Add("Total SoCal");
+                    //foreach (var dateTime in dateList)
+                    //{
+                    //    dailySumList2.Add(this.GetTotalSumLocationsPerDay(dateTime, adjustedSoCalData));
+                    //}
+                    //dealerListData.Add(dailySumList2);
+
+                    ExcelPackage master = new ExcelPackage(new FileInfo(this.RetailMasterFilePath));
+                    var masterWorksheet = master.Workbook.Worksheets[this.DateSelect.Month];
+                    this.SetAllDatesOnWorksheet(ref masterWorksheet, dateList);
+                    this.SetAllSoCalReimbursementAmountsOnWorksheet(ref masterWorksheet, dateList, dealerListData);
+                    master.Save();
+                    master.Dispose();
 
                     var worksheet = this.AppendReportData(adjustedSoCalData, package, this.DateSelect);
-                    this.SaveExcelFile(worksheet, new FileInfo("C:\\test.xlsx"));
+                    this.SaveExcelFile(worksheet, new FileInfo("C:\\DCom\\testSocal.xlsx"));
                 }
             }
             else
@@ -84,13 +101,13 @@ namespace DigicomDealerReportGenerator.Models
                         dealerListData.Add(dailySumList);
                     }
 
-                    var dailySumList2 = new List<dynamic>();
-                    dailySumList2.Add("Total NorCal");
-                    foreach (var dateTime in dateList)
-                    {
-                        dailySumList2.Add(this.GetTotalSumLocationsPerDay(dateTime, adjustedBayAreaData));
-                    }
-                    dealerListData.Add(dailySumList2);
+                    //var dailySumList2 = new List<dynamic>();
+                    //dailySumList2.Add("Total NorCal");
+                    //foreach (var dateTime in dateList)
+                    //{
+                    //    dailySumList2.Add(this.GetTotalSumLocationsPerDay(dateTime, adjustedBayAreaData));
+                    //}
+                    //dealerListData.Add(dailySumList2);
 
                     ExcelPackage master = new ExcelPackage(new FileInfo(this.RetailMasterFilePath));
                     var masterWorksheet = master.Workbook.Worksheets[this.DateSelect.Month];
@@ -100,14 +117,14 @@ namespace DigicomDealerReportGenerator.Models
                     master.Dispose();
 
                     var worksheet = this.AppendReportData(adjustedBayAreaData, package, this.DateSelect);
-                    this.SaveExcelFile(worksheet, new FileInfo("C:\\test.xlsx"));
+                    this.SaveExcelFile(worksheet, new FileInfo("C:\\DCom\\testNorCal.xlsx"));
                 }
             }
         }
 
         private void SetAllNorCalReimbursementAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
         {
-            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord", "Salinas", "Total NorCal" };
+            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord", "Salinas" };
             
             foreach (var location in locations)
             {
@@ -122,7 +139,7 @@ namespace DigicomDealerReportGenerator.Models
 
         private void SetAllSoCalReimbursementAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
         {
-            var locations = new List<string> { "Rosecrans", "Anaheim", "Imperial" "Santa Maria", "Total SoCal" };
+            var locations = new List<string> { "Rosecrans", "Anaheim", "Imperial", "Santa Maria" };
 
             foreach (var location in locations)
             {
@@ -163,8 +180,6 @@ namespace DigicomDealerReportGenerator.Models
                     return 17;
                 case "Salinas":
                     return 21;
-                case "Total NorCal":
-                    return 25;
                 case "Rosecrans":
                     return 31;
                 case "Anaheim":
@@ -172,9 +187,7 @@ namespace DigicomDealerReportGenerator.Models
                 case "Imperial":
                     return 39;
                 case "Santa Maria":
-                    return 41;
-                case "Total SoCal":
-                    return 47;
+                    return 43;
                 default:
                     return 5;
             }

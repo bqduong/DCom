@@ -184,13 +184,13 @@ namespace DigicomDealerReportGenerator
             if (isSoCalReport)
             {
                 templatePath = isQualified
-                                   ? executionPath + "Digicom Templates\\SoCal Qualified Transactions Template.xlsx"
+                                   ? executionPath + "Digicom Templates\\SoCal Qualified Transactions Template With Location.xlsx"
                                    : executionPath + "Digicom Templates\\SoCal Disqualified Transactions Template Final.xlsx";
             }
             else
             {
                 templatePath = isQualified
-                                   ? executionPath + "Digicom Templates\\Qualified Transactions Template.xlsx"
+                                   ? executionPath + "Digicom Templates\\Qualified Transactions Template With Location.xlsx"
                                    : executionPath + "Digicom Templates\\Disqualified Transactions Template Final.xlsx";
             }
 
