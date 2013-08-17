@@ -80,11 +80,20 @@ namespace DigicomDealerReportGenerator.Models
                         {
                             dailySumList.Add(this.GetSumPerLocationPerDay(distinctLocation, dateTime, adjustedBayAreaData));
                         }
+
                         dealerListData.Add(dailySumList);
                     }
 
+                    var dailySumList2 = new List<dynamic>();
+                    dailySumList2.Add("Total NorCal");
+                    foreach (var dateTime in dateList)
+                    {
+                        dailySumList2.Add(this.GetTotalSumLocationsPerDay(dateTime, adjustedBayAreaData));
+                    }
+                    dealerListData.Add(dailySumList2);
+
                     ExcelPackage master = new ExcelPackage(new FileInfo(this.RetailMasterFilePath));
-                    var masterWorksheet = master.Workbook.Worksheets[7];
+                    var masterWorksheet = master.Workbook.Worksheets[this.DateSelect.Month];
                     this.SetAllDatesOnWorksheet(ref masterWorksheet, dateList);
                     this.SetAllNorCalReimbursementAmountsOnWorksheet(ref masterWorksheet, dateList, dealerListData);
                     master.Save();
@@ -98,9 +107,22 @@ namespace DigicomDealerReportGenerator.Models
 
         private void SetAllNorCalReimbursementAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
         {
-            var reimbursementRows = new List<int> { 5, 9, 13, 17, 21, 25 };
-            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord", "Salinas" };
+            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord", "Salinas", "Total NorCal" };
+            
+            foreach (var location in locations)
+            {
+                var row = this.GetCorrespondingRowForLocation(location);
+                var data = this.GetCorrespondingRowDataForLocation(location, sumData);
+                foreach (var date in dateList)
+                {
+                    worksheet.SetValue(row, date.Day + 1, data[date.Day]);
+                }
+            }
+        }
 
+        private void SetAllSoCalReimbursementAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
+        {
+            var locations = new List<string> { "Rosecrans", "Anaheim", "Imperial" "Santa Maria", "Total SoCal" };
 
             foreach (var location in locations)
             {
@@ -141,17 +163,26 @@ namespace DigicomDealerReportGenerator.Models
                     return 17;
                 case "Salinas":
                     return 21;
-                
+                case "Total NorCal":
+                    return 25;
+                case "Rosecrans":
+                    return 31;
+                case "Anaheim":
+                    return 35;
+                case "Imperial":
+                    return 39;
+                case "Santa Maria":
+                    return 41;
+                case "Total SoCal":
+                    return 47;
                 default:
                     return 5;
             }
         }
-
-
-
+        
         private void SetAllDatesOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList)
         {
-            var dateRows = new List<int> { 3, 7, 11, 15, 19, 23, 29, 33, 37, 41, 45, 49, 53, 58 };
+            var dateRows = new List<int> { 3, 7, 11, 15, 19, 23, 29, 33, 37, 41, 45, 50 };
 
             foreach (var dateRow in dateRows)
             {
@@ -161,8 +192,7 @@ namespace DigicomDealerReportGenerator.Models
                 }
             }
         }
-
-
+        
         public List<DateTime> GetAllDatesInMonth(int year, int month)
         {
             var dates = new List<DateTime>();
@@ -183,6 +213,17 @@ namespace DigicomDealerReportGenerator.Models
             var sumPerLocationPerDay = matchingLocations.Select(qa => qa.TransactionAmount).Sum();
 
             return sumPerLocationPerDay;
+        }
+
+        public decimal GetTotalSumLocationsPerDay(DateTime date, IEnumerable<ITransactionRow> adjustedMasterList)
+        {
+            var validLocations = adjustedMasterList.Select(a => a as QualifiedTransactionRow)
+                                     .ToList()
+                                     .Where(q => q.Location != null && q.TransactionDate.Equals(date)).ToList();
+
+            var totalSumPerLocationsPerDay = validLocations.Select(qa => qa.TransactionAmount).Sum();
+
+            return totalSumPerLocationsPerDay;
         }
 
         public dynamic GetDistinctLocations(IEnumerable<ITransactionRow> adjustedMasterList)
