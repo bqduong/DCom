@@ -225,7 +225,7 @@ namespace DigicomDealerReportGenerator
 
         public static List<IDealerIdentification> GenerateAgentListWithDealerCode(IEnumerable<CommissionRow> masterList)
         {
-            var distinctItems = masterList.GroupBy(i => new { i.DealerCode, i.Agent }).Select(g => g.Key).ToList();
+            var distinctItems = masterList.GroupBy(i => new { /*i.DealerCode,*/ i.Agent }).Select(g => g.Key).ToList();
             var distinctDealers = new List<IDealerIdentification>();
 
             distinctDealers.Add(new DealerIdentification()
@@ -238,9 +238,9 @@ namespace DigicomDealerReportGenerator
             distinctDealers.AddRange(distinctItems
                 .Select(distinctItem => new DealerIdentification()
                 {
-                    DoorCode = distinctItem.DealerCode,
+                    //DoorCode = distinctItem.DealerCode,
                     DoorName = distinctItem.Agent,
-                    FullDealerIdentification = distinctItem.DealerCode + " - " + distinctItem.Agent
+                    FullDealerIdentification = /*distinctItem.DealerCode + " - " + */distinctItem.Agent
                 })
                 .Cast<IDealerIdentification>().OrderBy(d => d.DoorName).ToList());
 

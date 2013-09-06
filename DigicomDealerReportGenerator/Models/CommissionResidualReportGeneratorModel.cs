@@ -22,9 +22,9 @@ namespace DigicomDealerReportGenerator.Models
 
         public void GenerateSingleCommissionReport(string fullDealerId, ExcelPackage package)
         {
-            var fullDealerSplit = fullDealerId.Split(new char[]{'-'}, 2);
+            //var fullDealerSplit = fullDealerId.Split(new char[]{'-'}, 2);
             var reportDataRows =
-                this.CommissionReportGeneratorViewModel.MasterCommissionTransactionList.Where(m => m.DealerCode.Trim() == fullDealerSplit[0].Trim() && m.Agent.Trim() == fullDealerSplit[1].Trim())
+                this.CommissionReportGeneratorViewModel.MasterCommissionTransactionList.Where(m => /*m.DealerCode.Trim() == fullDealerSplit[0].Trim() &&*/ m.Agent.Trim() == fullDealerId.Trim())
                     .ToList();
 
             if (reportDataRows.Any())
@@ -37,9 +37,9 @@ namespace DigicomDealerReportGenerator.Models
 
         public void GenerateSingleResidualReport(string fullDealerId, ExcelPackage package)
         {
-            var fullDealerSplit = fullDealerId.Split(new char[] { '-' }, 2);
+            //var fullDealerSplit = fullDealerId.Split(new char[] { '-' }, 2);
             var reportDataRows =
-                this.CommissionReportGeneratorViewModel.MasterResidualTransactionList.Where(m => m.DealerId.Trim() == fullDealerSplit[0].Trim() && m.Agent.Trim() == fullDealerSplit[1].Trim())
+                this.CommissionReportGeneratorViewModel.MasterResidualTransactionList.Where(m => /*m.DealerId.Trim() == fullDealerSplit[0].Trim() &&*/ m.Agent.Trim() == fullDealerId.Trim())
                     .ToList();
 
             if (reportDataRows.Any())
