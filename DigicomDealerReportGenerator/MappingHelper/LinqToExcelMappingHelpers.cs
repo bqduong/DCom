@@ -50,6 +50,7 @@ namespace DigicomDealerReportGenerator.MappingHelper
         {
             excel.AddMapping<ITransactionRow>(q => q.DoorCode, "Door Code");
             excel.AddMapping<ITransactionRow>(q => q.DoorName, "Door Name");
+            excel.AddMapping<ITransactionRow>(q => q.Address, "Address");
             excel.AddMapping<ITransactionRow>(q => q.AccountNo, "Account Number");
             excel.AddMapping<ITransactionRow>(q => q.SubscriberId, "Subscriber  ID");
             excel.AddMapping<ITransactionRow>(q => q.Mdn, "MDN");
