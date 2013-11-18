@@ -58,6 +58,7 @@ namespace DigicomDealerReportGenerator.MappingHelper
             excel.AddMapping<ITransactionRow>(q => q.Sim, "SIM");
             excel.AddMapping<ITransactionRow>(q => q.EsnHistory, "ESN History");
             excel.AddMapping<ITransactionRow>(q => q.SimHistory, "SIM History");
+            excel.AddMapping<ITransactionRow>(q => q.TmobileLastNetworkHistory, "T-mobile Last Network History");
             excel.AddMapping<ITransactionRow>(q => q.HandsetModel, "Handset Model");
             excel.AddMapping<ITransactionRow>(q => q.TransactionDate, "Transaction Date");
             excel.AddMapping<ITransactionRow>(q => q.TransactionType, "Transaction Type");

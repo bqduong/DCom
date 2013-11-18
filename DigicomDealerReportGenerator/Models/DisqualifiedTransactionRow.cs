@@ -32,6 +32,8 @@ namespace DigicomDealerReportGenerator.Models
 
         public double AccountBalance { get; set; }
 
+        public DateTime TmobileLastNetworkHistory { get; set; }
+
         public string HandsetModel { get; set; }
 
         public DateTime TransactionDate { get; set; }

@@ -177,21 +177,40 @@ namespace DigicomDealerReportGenerator
         }
 
 
-        public static FileInfo GetTemplateFile(bool isQualified, bool isSoCalReport, string executionPath)
+        public static FileInfo GetTemplateFile(bool isQualified, bool isSoCalReport, bool isCallidus, string executionPath)
         {
             var templatePath = ""; 
-
+            //dirty hacky code to get code out asap
             if (isSoCalReport)
             {
-                templatePath = isQualified
+                if (isCallidus)
+                {
+                    templatePath = isQualified
                                    ? executionPath + "Digicom Templates\\SoCal Qualified Transactions Template With Location.xlsx"
                                    : executionPath + "Digicom Templates\\SoCal Disqualified Transactions Template Final.xlsx";
+                }
+                else
+                {
+                    templatePath = isQualified
+                                   ? executionPath + "Digicom Templates\\SoCal Qualified Transactions Template.xlsx"
+                                   : executionPath + "Digicom Templates\\SoCal Disqualified Transactions Template Final.xlsx";
+                }
+                
             }
             else
             {
-                templatePath = isQualified
+                if (isCallidus)
+                {
+                    templatePath = isQualified
                                    ? executionPath + "Digicom Templates\\Qualified Transactions Template With Location.xlsx"
                                    : executionPath + "Digicom Templates\\Disqualified Transactions Template Final.xlsx";
+                }
+                else
+                {
+                    templatePath = isQualified
+                                   ? executionPath + "Digicom Templates\\Qualified Transactions Template.xlsx"
+                                   : executionPath + "Digicom Templates\\Disqualified Transactions Template Final.xlsx";
+                }
             }
 
             return new FileInfo(templatePath);

@@ -28,6 +28,8 @@ namespace DigicomDealerReportGenerator.Models
 
         string SimHistory { get; set; }
 
+        DateTime TmobileLastNetworkHistory { get; set; }
+
         string HandsetModel { get; set; }
 
         DateTime TransactionDate { get; set; }

@@ -41,7 +41,7 @@ namespace DigicomDealerReportGenerator.Models
         {
             if (isSoCalReport)
             {
-                using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(true, isSoCalReport, this.CallidusReportGeneratorViewModel.ExecutionPath)))
+                using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(true, isSoCalReport, true, this.CallidusReportGeneratorViewModel.ExecutionPath)))
                 {
                     var adjustedSoCalData = this.CreateAdjustedReportData(this.MasterSoCalTransactionList, this.DateSelect);
 
@@ -85,7 +85,7 @@ namespace DigicomDealerReportGenerator.Models
             }
             else
             {
-                using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(true, isSoCalReport, this.CallidusReportGeneratorViewModel.ExecutionPath)))
+                using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(true, isSoCalReport, true, this.CallidusReportGeneratorViewModel.ExecutionPath)))
                 {
                     var adjustedBayAreaData = this.CreateAdjustedReportData(this.MasterBayAreaTransactionList, this.DateSelect);
 
@@ -269,12 +269,14 @@ namespace DigicomDealerReportGenerator.Models
             worksheet.Cells.Style.Font.Size = 8;
 
             var rows = reportDataRows.Select(transactionRow => transactionRow as QualifiedTransactionRow).ToList();
-            var properties = new QualifiedTransactionRow().GetType().GetProperties();
+            var properties = new QualifiedTransactionRow().GetType().GetProperties().ToList();
+
+            properties.RemoveAt(11);
 
             var startRow = worksheet.Dimension.End.Row + 1;
             for (int i = 0; i < rows.Count; i++)
             {
-                for (int j = 1; j < properties.Length + 1; j++)
+                for (int j = 1; j < properties.Count + 1; j++)
                 {
                     var value = rows[i].GetType().GetProperty(properties[j - 1].Name).GetValue(rows[i], null);
                     value = DataHelpers.GetDateString(value);
@@ -282,7 +284,7 @@ namespace DigicomDealerReportGenerator.Models
                     worksheet.SetValue(i + startRow, j, value);
                 }
             }
-
+            worksheet.SetValue(4, 17, DataHelpers.GetStartingMonthAndYear(dateSelect));
             return worksheet;
         }
 

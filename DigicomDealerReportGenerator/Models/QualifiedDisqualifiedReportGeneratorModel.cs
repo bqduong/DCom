@@ -72,12 +72,14 @@ namespace DigicomDealerReportGenerator.Models
         protected void AppendQualifiedWorksheetData(ref ExcelWorksheet worksheet, IEnumerable<ITransactionRow> reportDataRows, DateTime startDate)
         {
             var rows = reportDataRows.Select(transactionRow => transactionRow as QualifiedTransactionRow).ToList();
-            var properties = new QualifiedTransactionRow().GetType().GetProperties();
+            var properties = new QualifiedTransactionRow().GetType().GetProperties().ToList();
+
+            properties.RemoveAt(3);
 
             var startRow = worksheet.Dimension.End.Row + 1;
             for (int i = 0; i < rows.Count; i++)
             {
-                for (int j = 1; j < properties.Length + 1; j++)
+                for (int j = 1; j < properties.Count + 1; j++)
                 {
                     var value = rows[i].GetType().GetProperty(properties[j - 1].Name).GetValue(rows[i], null);
                     value = DataHelpers.GetDateString(value);

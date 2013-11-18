@@ -20,16 +20,16 @@ namespace DigicomDealerReportGenerator.FormattingHelper
 
             worksheet.InsertRow(1, 16);
             worksheet.Cells[1, 4].Style.Font.Size = 14;
-            if (isSoCalReport)
-            {
+            //if (isSoCalReport)
+            //{
                 worksheet.SetValue(1, 1, "MetroPCS Wireless, Inc. Sales Incentive and Compensation Division");
                 worksheet.SetValue(2, 1, "Disqualified Transaction Report");
                 soCalOffset = 2;
-            }
-            else
-            {
-                worksheet.SetValue(1, 4, "Disqualified Transaction Report");
-            }
+            //}
+            //else
+            //{
+            //    worksheet.SetValue(1, 4, "Disqualified Transaction Report");
+            //}
 
             worksheet.Cells[2 + soCalOffset, 2].Style.Font.Size = 9;
             worksheet.Cells[3 + soCalOffset, 1].Style.Font.Size = 9;
@@ -100,18 +100,18 @@ namespace DigicomDealerReportGenerator.FormattingHelper
             //            : System.Drawing.Color.FromArgb(177, 160, 199));
             //}
 
-            worksheet.SetValue(isSoCalReport ? 17 : 18, 17, DataHelpers.GetStartingMonthAndYear(startDate));
+            worksheet.SetValue(/*isSoCalReport ? 17 : 18*/ 17, 17, DataHelpers.GetStartingMonthAndYear(startDate));
         }
 
         public static void FormatQualifiedReport(ref ExcelWorksheet worksheet, DateTime startDate, 
-                                                 decimal sumTotal, int startRow, PropertyInfo[] properties, 
+                                                 decimal sumTotal, int startRow, List<PropertyInfo> properties, 
                                                  List<QualifiedTransactionRow> rows, bool isSoCalReport)
         {
-            worksheet.SetValue(isSoCalReport ? 4 : 2, 17, DataHelpers.GetStartingMonthAndYear(startDate));
+            worksheet.SetValue(/*isSoCalReport ? 4 : 2*/4, 17, DataHelpers.GetStartingMonthAndYear(startDate));
             worksheet.SetValue(rows.Count + startRow, properties.Count() - 1, "$" + String.Format("{0:0.00}", sumTotal));
             worksheet.Cells[rows.Count + startRow, properties.Count() - 1].Style.Font.Bold = true;
             worksheet.Cells[rows.Count + startRow, properties.Count() - 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[rows.Count + startRow, properties.Count() - 1].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(177, 160, 199));
+            worksheet.Cells[rows.Count + startRow, properties.Count() - 1].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(216, 216, 216));
         }
     }
 }
