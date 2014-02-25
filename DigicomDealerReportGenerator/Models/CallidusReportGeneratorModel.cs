@@ -131,7 +131,7 @@ namespace DigicomDealerReportGenerator.Models
 
         private void SetAllNorCalReimbursementAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
         {
-            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord", "Salinas" };
+            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord" };
             
             foreach (var location in locations)
             {
@@ -146,7 +146,7 @@ namespace DigicomDealerReportGenerator.Models
 
         private void SetAllSoCalReimbursementAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
         {
-            var locations = new List<string> { "Rosecrans", "Anaheim", "Imperial", "Santa Maria" };
+            var locations = new List<string> { "Rosecrans", "Anaheim", "Imperial" };
 
             foreach (var location in locations)
             {
@@ -177,32 +177,53 @@ namespace DigicomDealerReportGenerator.Models
         {
             switch (location)
             {
+                //2014 Mod
                 case "Fruitvale":
-                    return 5;
+                    return 4;
                 case "San Jose":
-                    return 9;
+                    return 8;
                 case "Hayward":
-                    return 13;
+                    return 12;
                 case "Concord":
-                    return 17;
-                case "Salinas":
-                    return 21;
+                    return 16;
                 case "Rosecrans":
-                    return 31;
+                    return 26;
                 case "Anaheim":
-                    return 35;
+                    return 30;
                 case "Imperial":
-                    return 39;
-                case "Santa Maria":
-                    return 43;
+                    return 34;
                 default:
-                    return 5;
+                    return 4;
+                //case "Fruitvale":
+                //    return 5;
+                //case "San Jose":
+                //    return 9;
+                //case "Hayward":
+                //    return 13;
+                //case "Concord":
+                //    return 17;
+                //case "Salinas":
+                //    return 21;
+                //case "Rosecrans":
+                //    return 31;
+                //case "Anaheim":
+                //    return 35;
+                //case "Imperial":
+                //    return 39;
+                //case "Santa Maria":
+                //    return 43;
+                //default:
+                //    return 5;
             }
         }
         
         private void SetAllDatesOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList)
         {
-            var dateRows = new List<int> { 3, 7, 11, 15, 19, 23, 29, 33, 37, 41, 45, 50 };
+            //2014
+            var dateRows = new List<int> { 2, 6, 10, 14, 18, 24, 28, 32, 36, 41 };
+            
+            //2013
+            //var dateRows = new List<int> { 3, 7, 11, 15, 19, 23, 29, 33, 37, 41, 45, 50 };
 
             foreach (var dateRow in dateRows)
             {
