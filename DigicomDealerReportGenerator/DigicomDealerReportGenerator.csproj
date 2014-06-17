@@ -96,11 +96,14 @@
     <Compile Include="Models\CommissionResidualReportGeneratorModel.cs" />
     <Compile Include="Models\CommissionRow.cs" />
     <Compile Include="Models\CommissionTotalRow.cs" />
+    <Compile Include="Models\IRebateRow.cs" />
+    <Compile Include="Models\RebateReportGeneratorModel.cs" />
     <Compile Include="Models\DealerIdentification.cs" />
     <Compile Include="Models\DisqualifiedTransactionRow.cs" />
     <Compile Include="Models\IDealerIdentification.cs" />
     <Compile Include="Models\ITransactionRow.cs" />
     <Compile Include="Models\QualifiedTransactionRow.cs" />
+    <Compile Include="Models\RebateTransactionRow.cs" />
     <Compile Include="Models\ResidualRow.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Models\CallidusReportGeneratorModel.cs" />
@@ -108,6 +111,7 @@
     <Compile Include="ViewModels\CallidusReportGeneratorViewModel.cs" />
     <Compile Include="Models\QualifiedDisqualifiedReportGeneratorModel.cs" />
     <Compile Include="ViewModels\CommissionResidualReportGeneratorViewModel.cs" />
+    <Compile Include="ViewModels\RebateReportGeneratorViewModel.cs" />
     <Compile Include="ViewModels\QualifiedDisqualifiedReportGeneratorViewModel.cs" />
     <Compile Include="ViewModels\DigicomReportGeneratorViewModel.cs" />
     <Page Include="MainWindow.xaml">

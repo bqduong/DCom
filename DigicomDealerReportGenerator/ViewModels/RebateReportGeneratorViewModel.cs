@@ -17,11 +17,11 @@ using OfficeOpenXml;
 
 namespace DigicomDealerReportGenerator.ViewModels
 {
-    public class QualifiedDisqualifiedReportGeneratorViewModel : BaseViewModel, INotifyPropertyChanged
+    public class RebateReportGeneratorViewModel : BaseViewModel, INotifyPropertyChanged
     {
         #region Fields
 
-        private QualifiedDisqualifiedReportGeneratorModel qualifiedDisqualifiedReportGeneratorModel;
+        private RebateReportGeneratorModel rebateReportGeneratorModel;
 
         private ExcelWorksheet templateWorksheet;
 
@@ -43,7 +43,7 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         private string selectedSourceDealerDoorCode;
 
-        private IEnumerable<ITransactionRow> masterTransactionList;
+        private IEnumerable<IRebateRow> masterTransactionList;
 
         private List<IDealerIdentification> masterDealerIdentificationList;
 
@@ -51,9 +51,10 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         #endregion
 
-        public QualifiedDisqualifiedReportGeneratorViewModel(string executionPath) : base(executionPath)
+        public RebateReportGeneratorViewModel(string executionPath)
+            : base(executionPath)
         {
-            this.qualifiedDisqualifiedReportGeneratorModel = new QualifiedDisqualifiedReportGeneratorModel(this);
+            this.rebateReportGeneratorModel = new RebateReportGeneratorModel(this);
         }
 
         #region Properties
@@ -190,7 +191,7 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
         }
 
-        public IEnumerable<ITransactionRow> MasterTransactionList
+        public IEnumerable<IRebateRow> MasterTransactionList
         {
             get
             {
@@ -245,12 +246,12 @@ namespace DigicomDealerReportGenerator.ViewModels
                     LinqToExcelMappingHelpers.MapToLinq(ref this.Excel, DataHelpers.GetReportType, this.SourcePath);
 
                     //populate dropdown list
-                    this.MasterTransactionList = DataHelpers.GetMasterListOfTransactionRows(this.IsQualified, this.Excel);
-                    this.MasterDealerIdentificationList = DataHelpers.GenerateDoorNameListWithDoorCode(this.MasterTransactionList, null);
+                    this.MasterTransactionList = DataHelpers.GetMasterListOfRebateRows(this.Excel);
+                    this.MasterDealerIdentificationList = DataHelpers.GenerateDoorNameListWithDoorCode(null, this.MasterTransactionList);
 
                     //populate date range
-                    this.StartDate = DataHelpers.GetEarliestDate(this.MasterTransactionList, this.IsQualified);
-                    this.EndDate = DataHelpers.GetLatestDate(this.MasterTransactionList, this.IsQualified);
+                    this.StartDate = DataHelpers.GetEarliestDate(this.MasterTransactionList);
+                    this.EndDate = DataHelpers.GetLatestDate(this.MasterTransactionList);
                 }
                 catch (Exception e)
                 {
@@ -271,7 +272,7 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         protected void GenerateReports(object param = null)
         {
-            var dealerReportGenerator = new QualifiedDisqualifiedReportGeneratorModel(this);
+            var dealerReportGenerator = new RebateReportGeneratorModel(this);
 
             if (SelectedSourceDealerDoorCode == "All")
             {

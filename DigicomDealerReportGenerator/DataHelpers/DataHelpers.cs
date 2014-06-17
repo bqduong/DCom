@@ -17,9 +17,14 @@ namespace DigicomDealerReportGenerator
 
         public const string Qualified = "qualified";
 
+        public const string Rebate = "rebate";
+
         public static string GetReportType(string filename)
         {
-            return filename.ToLower().Contains(Disqualified) ? Disqualified : Qualified;
+            return filename.ToLower().Contains(Disqualified) ? Disqualified 
+                                                             : filename.ToLower().Contains(Rebate)
+                                                             ? Rebate 
+                                                             : Qualified;
         }
 
 
@@ -79,6 +84,29 @@ namespace DigicomDealerReportGenerator
 
             return startDate;
         }
+        public static DateTime GetLatestDate(IEnumerable<IRebateRow> masterList)
+        {
+            var endDate = new DateTime();
+            endDate =
+                    masterList.Select(transactionRow => transactionRow as RebateTransactionRow)
+                              .ToList()
+                              .Select(l => l.PostedDate)
+                              .Where(l => l.Year != 0001)
+                              .Max(l => l.Date);
+            return endDate;
+        }
+
+        public static DateTime GetEarliestDate(IEnumerable<IRebateRow> masterList)
+        {
+            var startDate = new DateTime();
+            startDate =
+                    masterList.Select(transactionRow => transactionRow as RebateTransactionRow)
+                              .ToList()
+                              .Select(l => l.PostedDate)
+                              .Where(l => l.Year != 0001)
+                              .Min(l => l.Date);
+            return startDate;
+        }
 
 
         public static string GetStartingMonthAndYear(DateTime startDate)
@@ -131,6 +159,17 @@ namespace DigicomDealerReportGenerator
             return fileString.Replace("/", "-");
         }
 
+        public static string CreateRebateReportFileName(IRebateRow reportDataRow, DateTime startDate, DateTime endDate)
+        {
+            var fileString = "";
+
+            fileString = reportDataRow.DoorCode + " - " + reportDataRow.DoorName + " (Rebate - " +
+                         startDate.ToString("MM/dd/yy")
+                         + " - " + endDate.ToString("MM/dd/yy") + ").xlsx";
+
+            return fileString.Replace("/", "-");
+        }
+
 
         public static IEnumerable<ITransactionRow> CreateReportData(string doorCode, DateTime startDate, DateTime endDate, 
                                                                     bool isQualified, IEnumerable<ITransactionRow> masterTransactionList)
@@ -145,6 +184,15 @@ namespace DigicomDealerReportGenerator
             }
             return
                 masterTransactionList.Select(transactionRow => transactionRow as DisqualifiedTransactionRow)
+                    .Where(t => t.DoorCode == doorCode && t.TransactionDate >= startDate && t.TransactionDate <= endDate)
+                    .OrderBy(t => t.TransactionDate)
+                    .ToList();
+        }
+
+        public static IEnumerable<IRebateRow> CreateRebateReportData(string doorCode, DateTime startDate, DateTime endDate, IEnumerable<IRebateRow> rebateRows)
+        {
+            return
+                rebateRows.Select(transactionRow => transactionRow as RebateTransactionRow)
                     .Where(t => t.DoorCode == doorCode && t.TransactionDate >= startDate && t.TransactionDate <= endDate)
                     .OrderBy(t => t.TransactionDate)
                     .ToList();
@@ -217,9 +265,11 @@ namespace DigicomDealerReportGenerator
         }
 
 
-        public static List<IDealerIdentification> GenerateDoorNameListWithDoorCode(IEnumerable<ITransactionRow> masterList)
+        public static List<IDealerIdentification> GenerateDoorNameListWithDoorCode(IEnumerable<ITransactionRow> masterList, IEnumerable<IRebateRow> rebateRows)
         {
-            var distinctItems = masterList.GroupBy(i => new { i.DoorCode, i.DoorName }).Select(g => g.Key).ToList();
+            var distinctItems = masterList != null
+                                    ? masterList.GroupBy(i => new {i.DoorCode, i.DoorName}).Select(g => g.Key).ToList()
+                                    : rebateRows.GroupBy(i => new {i.DoorCode, i.DoorName}).Select(g => g.Key).ToList();
             var distinctDealers = new List<IDealerIdentification>();
 
             distinctDealers.Add(new DealerIdentification()
@@ -309,6 +359,13 @@ namespace DigicomDealerReportGenerator
                 validRows.RemoveAll(v => v.DoorCode == null);
                 return validRows;
             }
+        }
+
+        public static IEnumerable<IRebateRow> GetMasterListOfRebateRows(ExcelQueryFactory excel)
+        {
+                var validRows = (from x in excel.Worksheet<RebateTransactionRow>() select x).ToList();
+                validRows.RemoveAll(v => v.DoorCode == null);
+                return validRows;
         }
 
         public static IEnumerable<CommissionRow> GetMasterListOfCommissionRows(ExcelQueryFactory excel)

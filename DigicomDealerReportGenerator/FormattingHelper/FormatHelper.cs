@@ -113,5 +113,9 @@ namespace DigicomDealerReportGenerator.FormattingHelper
             worksheet.Cells[rows.Count + startRow, properties.Count() - 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
             worksheet.Cells[rows.Count + startRow, properties.Count() - 1].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(216, 216, 216));
         }
+
+        public static void FormatRebateReportLegend(ref ExcelWorksheet worksheet, DateTime startDate, bool isSoCalReport)
+        {
+        }
     }
 }

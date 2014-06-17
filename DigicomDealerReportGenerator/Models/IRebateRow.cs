@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace DigicomDealerReportGenerator.Models
 {
-    public interface ITransactionRow
+    public interface IRebateRow
     {
         string DoorCode { get; set; }
 
         string DoorName { get; set; }
 
         string Address { get; set; }
-        
+
         string AccountNo { get; set; }
 
         string SubscriberId { get; set; }
@@ -24,20 +24,18 @@ namespace DigicomDealerReportGenerator.Models
 
         string Sim { get; set; }
 
-        //string EsnHistory { get; set; }
-
-        //string SimHistory { get; set; }
-
-        //DateTime TmobileLastNetworkHistory { get; set; }
-
         string HandsetModel { get; set; }
 
         DateTime TransactionDate { get; set; }
 
-        //string TransactionType { get; set; }
+        string ProgramName { get; set; }
 
-        //string RatePlan { get; set; }
+        string RebateType { get; set; }
 
-        //string BoltOn { get; set; }
+        string QualificationStatus { get; set; }
+        
+        string RebateAmount { get; set; }
+
+        DateTime PostedDate { get; set; }
     }
 }

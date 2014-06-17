@@ -14,36 +14,61 @@ namespace DigicomDealerReportGenerator.MappingHelper
     {
         public const string Disqualified = "disqualified";
         public const string Qualified = "qualified";
+        public const string Rebate = "rebate";
 
         public static void MapToLinq(ref ExcelQueryFactory excel, Func<string, string> getReportType, string filename)
         {
             LinqToExcelMappingHelpers.ModifyCommonTransactionRowMappings(ref excel);
 
-            if (getReportType(filename) == Disqualified)
+            switch (getReportType(filename))
             {
-                LinqToExcelMappingHelpers.ModifyDisqualilfiedTransactionRowMappings(ref excel);
-            }
-            else
-            {
-                LinqToExcelMappingHelpers.ModifyQualilfiedTransactionRowMappings(ref excel);
+                case Disqualified:
+                    LinqToExcelMappingHelpers.ModifyDisqualilfiedTransactionRowMappings(ref excel);
+                    break;
+                case Rebate:
+                    LinqToExcelMappingHelpers.ModifyRebateTransactionRowMappings(ref excel);
+                    break;
+                default:
+                    LinqToExcelMappingHelpers.ModifyQualilfiedTransactionRowMappings(ref excel);
+                    break;
             }
         }
 
         public static void ModifyDisqualilfiedTransactionRowMappings(ref ExcelQueryFactory excel)
         {
+            excel.AddMapping<DisqualifiedTransactionRow>(q => q.EsnHistory, "ESN History");
+            excel.AddMapping<DisqualifiedTransactionRow>(q => q.SimHistory, "SIM History");
+            excel.AddMapping<DisqualifiedTransactionRow>(q => q.TmobileLastNetworkHistory, "T-mobile Last Network History");
             excel.AddMapping<DisqualifiedTransactionRow>(q => q.SubscriberStatus, "Subscriber Status");
             excel.AddMapping<DisqualifiedTransactionRow>(q => q.AccountBalance, "Account Balance");
             excel.AddMapping<DisqualifiedTransactionRow>(q => q.BusinesRuleReasonCode, "Business Rule Reason Code");
+            excel.AddMapping<DisqualifiedTransactionRow>(q => q.TransactionType, "Transaction Type");
+            excel.AddMapping<DisqualifiedTransactionRow>(q => q.RatePlan, "Rate Plan");
+            excel.AddMapping<DisqualifiedTransactionRow>(q => q.BoltOn, "Bolt On");
         }
 
         public static void ModifyQualilfiedTransactionRowMappings(ref ExcelQueryFactory excel)
         {
-
+            excel.AddMapping<QualifiedTransactionRow>(q => q.EsnHistory, "ESN History");
+            excel.AddMapping<QualifiedTransactionRow>(q => q.SimHistory, "SIM History");
+            excel.AddMapping<QualifiedTransactionRow>(q => q.TmobileLastNetworkHistory, "T-mobile Last Network History");
             excel.AddMapping<QualifiedTransactionRow>(q => q.Location, "Location");
             excel.AddMapping<QualifiedTransactionRow>(q => q.RatePlanAmount, "Rate Plan Amount");
             excel.AddMapping<QualifiedTransactionRow>(q => q.BoltOnAmount, "Bolt On Amount");
             excel.AddMapping<QualifiedTransactionRow>(q => q.TransactionAmount, "Transaction Amount");
             excel.AddMapping<QualifiedTransactionRow>(q => q.PostedDate, "Posted Date");
+            excel.AddMapping<QualifiedTransactionRow>(q => q.TransactionType, "Transaction Type");
+            excel.AddMapping<QualifiedTransactionRow>(q => q.RatePlan, "Rate Plan");
+            excel.AddMapping<QualifiedTransactionRow>(q => q.BoltOn, "Bolt On");
+        }
+
+        public static void ModifyRebateTransactionRowMappings(ref ExcelQueryFactory excel)
+        {
+            excel.AddMapping<IRebateRow>(q => q.ProgramName, "Program Name");
+            excel.AddMapping<IRebateRow>(q => q.RebateType, "Rebate Type");
+            excel.AddMapping<IRebateRow>(q => q.QualificationStatus, "Qualification Status");
+            excel.AddMapping<IRebateRow>(q => q.RebateAmount, "Rebate Amount");
+            excel.AddMapping<IRebateRow>(q => q.PostedDate, "Posted Date");
         }
 
         public static void ModifyCommonTransactionRowMappings(ref ExcelQueryFactory excel)
@@ -56,14 +81,8 @@ namespace DigicomDealerReportGenerator.MappingHelper
             excel.AddMapping<ITransactionRow>(q => q.Mdn, "MDN");
             excel.AddMapping<ITransactionRow>(q => q.Esn, "ESN");
             excel.AddMapping<ITransactionRow>(q => q.Sim, "SIM");
-            excel.AddMapping<ITransactionRow>(q => q.EsnHistory, "ESN History");
-            excel.AddMapping<ITransactionRow>(q => q.SimHistory, "SIM History");
-            excel.AddMapping<ITransactionRow>(q => q.TmobileLastNetworkHistory, "T-mobile Last Network History");
             excel.AddMapping<ITransactionRow>(q => q.HandsetModel, "Handset Model");
             excel.AddMapping<ITransactionRow>(q => q.TransactionDate, "Transaction Date");
-            excel.AddMapping<ITransactionRow>(q => q.TransactionType, "Transaction Type");
-            excel.AddMapping<ITransactionRow>(q => q.RatePlan, "Rate Plan");
-            excel.AddMapping<ITransactionRow>(q => q.BoltOn, "Bolt On");
         }
 
 
