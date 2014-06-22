@@ -67,7 +67,7 @@ namespace DigicomDealerReportGenerator.MappingHelper
             excel.AddMapping<IRebateRow>(q => q.ProgramName, "Program Name");
             excel.AddMapping<IRebateRow>(q => q.RebateType, "Rebate Type");
             excel.AddMapping<IRebateRow>(q => q.QualificationStatus, "Qualification Status");
-            excel.AddMapping<IRebateRow>(q => q.RebateAmount, "Rebate Amount");
+            excel.AddMapping<RebateTransactionRow>(q => q.RebateAmount, "Rebate Amount");
             excel.AddMapping<IRebateRow>(q => q.PostedDate, "Posted Date");
         }
 

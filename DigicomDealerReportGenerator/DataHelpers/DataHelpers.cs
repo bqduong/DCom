@@ -90,7 +90,7 @@ namespace DigicomDealerReportGenerator
             endDate =
                     masterList.Select(transactionRow => transactionRow as RebateTransactionRow)
                               .ToList()
-                              .Select(l => l.PostedDate)
+                              .Select(l => l.TransactionDate)
                               .Where(l => l.Year != 0001)
                               .Max(l => l.Date);
             return endDate;
@@ -102,7 +102,7 @@ namespace DigicomDealerReportGenerator
             startDate =
                     masterList.Select(transactionRow => transactionRow as RebateTransactionRow)
                               .ToList()
-                              .Select(l => l.PostedDate)
+                              .Select(l => l.TransactionDate)
                               .Where(l => l.Year != 0001)
                               .Min(l => l.Date);
             return startDate;
@@ -194,7 +194,7 @@ namespace DigicomDealerReportGenerator
             return
                 rebateRows.Select(transactionRow => transactionRow as RebateTransactionRow)
                     .Where(t => t.DoorCode == doorCode && t.TransactionDate >= startDate && t.TransactionDate <= endDate)
-                    .OrderBy(t => t.TransactionDate)
+                    .OrderBy(t => t.PostedDate)
                     .ToList();
         }
 
@@ -261,6 +261,14 @@ namespace DigicomDealerReportGenerator
                 }
             }
 
+            return new FileInfo(templatePath);
+        }
+
+        public static FileInfo GetRebateTemplateFile(string executionPath, bool isSoCalReport)
+        {
+            var templatePath = isSoCalReport
+                                   ? executionPath + "Digicom Templates\\SoCal Rebate Transaction Report Template.xlsx"
+                                   : executionPath + "Digicom Templates\\Rebate Transaction Report Template.xlsx";
             return new FileInfo(templatePath);
         }
 

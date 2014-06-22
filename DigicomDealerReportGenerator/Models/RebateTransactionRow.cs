@@ -34,7 +34,7 @@ namespace DigicomDealerReportGenerator.Models
 
         public string QualificationStatus { get; set; }
 
-        public string RebateAmount { get; set; }
+        public decimal RebateAmount { get; set; }
 
         public DateTime PostedDate { get; set; }
     }

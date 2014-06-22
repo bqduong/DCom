@@ -281,7 +281,7 @@ namespace DigicomDealerReportGenerator.ViewModels
 
                 foreach (var doorCode in doorCodes)
                 {
-                    using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(this.IsQualified, this.IsSoCalReport, false, this.executionPath)))
+                    using (ExcelPackage package = new ExcelPackage(DataHelpers.GetRebateTemplateFile(this.executionPath, this.IsSoCalReport)))
                     {
                         dealerReportGenerator.GenerateSingleReport(doorCode, package);
                     }
@@ -289,7 +289,7 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
             else
             {
-                using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(this.IsQualified, this.IsSoCalReport, false, this.executionPath)))
+                using (ExcelPackage package = new ExcelPackage(DataHelpers.GetRebateTemplateFile(this.executionPath, this.IsSoCalReport)))
                 {
                     dealerReportGenerator.GenerateSingleReport(this.SelectedSourceDealerDoorCode, package);
                 }

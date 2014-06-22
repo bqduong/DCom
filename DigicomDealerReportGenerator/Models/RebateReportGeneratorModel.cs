@@ -29,7 +29,7 @@ namespace DigicomDealerReportGenerator.Models
             if (reportDataRows.Any())
             {
                 var worksheet = this.AppendRebateReportData(reportDataRows, package, this.viewModel.StartDate);
-                this.SaveRebateReportFile(reportDataRows.FirstOrDefault(), worksheet, this.viewModel.IsQualified, this.viewModel.StartDate,
+                this.SaveRebateReportFile(reportDataRows.FirstOrDefault(), worksheet, this.viewModel.StartDate,
                                     this.viewModel.EndDate, this.viewModel.DestinationPath);
             }
         }
@@ -78,7 +78,7 @@ namespace DigicomDealerReportGenerator.Models
             reportPackage.Dispose();
         }
 
-        protected void SaveRebateReportFile(IRebateRow reportDataRow, ExcelWorksheet worksheet, bool isQualified, DateTime startDate, DateTime endDate, string destinationPath)
+        protected void SaveRebateReportFile(IRebateRow reportDataRow, ExcelWorksheet worksheet, DateTime startDate, DateTime endDate, string destinationPath)
         {
             var fileName = DataHelpers.CreateRebateReportFileName(reportDataRow, startDate, endDate);
             var filePath = new FileInfo(destinationPath + "\\" + fileName);
@@ -141,14 +141,12 @@ namespace DigicomDealerReportGenerator.Models
         protected void AppendRebateWorksheetData(ref ExcelWorksheet worksheet, IEnumerable<IRebateRow> reportDataRows, DateTime startDate)
         {
             var rows = reportDataRows.Select(transactionRow => transactionRow as RebateTransactionRow).ToList();
-            var properties = new RebateTransactionRow().GetType().GetProperties();
-
-            FormatHelper.FormatRebateReportLegend(ref worksheet, startDate, this.viewModel.IsSoCalReport);
-
+            var properties = new RebateTransactionRow().GetType().GetProperties().ToList();
+            
             var startRow = worksheet.Dimension.End.Row + 1;
             for (int i = 0; i < rows.Count; i++)
             {
-                for (int j = 1; j < properties.Length + 1; j++)
+                for (int j = 1; j < properties.Count + 1; j++)
                 {
                     var value = rows[i].GetType().GetProperty(properties[j - 1].Name).GetValue(rows[i], null);
                     value = DataHelpers.GetDateString(value);
@@ -157,6 +155,9 @@ namespace DigicomDealerReportGenerator.Models
                     worksheet.Cells[i + startRow, j].Style.Font.Size = 8;
                 }
             }
+            
+            var sumTotal = rows.Select(r => r.RebateAmount).Sum();
+            FormatHelper.FormatRebateReportLegend(ref worksheet, startDate, sumTotal, startRow, properties, rows, this.viewModel.IsSoCalReport);
         }
     }
 }
