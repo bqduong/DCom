@@ -24,6 +24,10 @@ namespace DigicomDealerReportGenerator.Models
 
         public IEnumerable<ITransactionRow> MasterSoCalTransactionList { get; set; }
 
+        public IEnumerable<RebateTransactionRow> MasterBayAreaRebateTransactionList { get; set; }
+
+        public IEnumerable<RebateTransactionRow> MasterSoCalRebateTransactionList { get; set; }
+        
         public DateTime DateSelect { get; set; }
 
         public string RetailMasterFilePath { get; set; }
@@ -33,7 +37,7 @@ namespace DigicomDealerReportGenerator.Models
         public void ProcessQPayReports()
         {
             this.CreateAdjustedCrystalReportsFile(false);
-            this.CreateAdjustedCrystalReportsFile(true);
+            //this.CreateAdjustedCrystalReportsFile(true);
             MessageBox.Show("Callidus complete.");
         }
 
@@ -61,18 +65,11 @@ namespace DigicomDealerReportGenerator.Models
                         dealerListData.Add(dailySumList);
                     }
 
-                    //var dailySumList2 = new List<dynamic>();
-                    //dailySumList2.Add("Total SoCal");
-                    //foreach (var dateTime in dateList)
-                    //{
-                    //    dailySumList2.Add(this.GetTotalSumLocationsPerDay(dateTime, adjustedSoCalData));
-                    //}
-                    //dealerListData.Add(dailySumList2);
-
                     ExcelPackage master = new ExcelPackage(new FileInfo(this.RetailMasterFilePath));
                     var masterWorksheet = master.Workbook.Worksheets[this.DateSelect.Month];
                     this.SetAllDatesOnWorksheet(ref masterWorksheet, dateList);
                     this.SetAllSoCalReimbursementAmountsOnWorksheet(ref masterWorksheet, dateList, dealerListData);
+                    this.SetAllSoCalRebateAmountsOnWorksheet(ref masterWorksheet, dateList, dealerListData);
                     master.Save();
                     master.Dispose();
 
@@ -87,6 +84,7 @@ namespace DigicomDealerReportGenerator.Models
             {
                 using (ExcelPackage package = new ExcelPackage(DataHelpers.GetTemplateFile(true, isSoCalReport, true, this.CallidusReportGeneratorViewModel.ExecutionPath)))
                 {
+                    //for Reimbursement
                     var adjustedBayAreaData = this.CreateAdjustedReportData(this.MasterBayAreaTransactionList, this.DateSelect);
 
                     var distinctLocations = this.GetDistinctLocations(adjustedBayAreaData);
@@ -105,18 +103,31 @@ namespace DigicomDealerReportGenerator.Models
                         dealerListData.Add(dailySumList);
                     }
 
-                    //var dailySumList2 = new List<dynamic>();
-                    //dailySumList2.Add("Total NorCal");
-                    //foreach (var dateTime in dateList)
-                    //{
-                    //    dailySumList2.Add(this.GetTotalSumLocationsPerDay(dateTime, adjustedBayAreaData));
-                    //}
-                    //dealerListData.Add(dailySumList2);
 
+                    //for Rebate
+                    //var adjustedRebateBayAreaData = this.CreateAdjustedRebateReportData(this.MasterBayAreaRebateTransactionList, this.DateSelect);
+
+                    var distinctRebateLocations = this.GetDistinctLocations(MasterBayAreaRebateTransactionList);
+
+                    var dealerRebateListData = new List<dynamic>();
+                    var dateRebateList = this.GetAllDatesInMonth(this.DateSelect.Year, this.DateSelect.Month);
+                    foreach (var distinctLocation in distinctRebateLocations)
+                    {
+                        var dailySumList = new List<dynamic>();
+                        dailySumList.Add(distinctLocation);
+                        foreach (var dateTime in dateRebateList)
+                        {
+                            dailySumList.Add(this.GetSumPerLocationPerDay(distinctLocation, dateTime, MasterBayAreaRebateTransactionList));
+                        }
+
+                        dealerRebateListData.Add(dailySumList);
+                    }
+                    
                     ExcelPackage master = new ExcelPackage(new FileInfo(this.RetailMasterFilePath));
                     var masterWorksheet = master.Workbook.Worksheets[this.DateSelect.Month];
                     this.SetAllDatesOnWorksheet(ref masterWorksheet, dateList);
                     this.SetAllNorCalReimbursementAmountsOnWorksheet(ref masterWorksheet, dateList, dealerListData);
+                    this.SetAllNorCalRebateAmountsOnWorksheet(ref masterWorksheet, dateRebateList, dealerRebateListData);
                     master.Save();
                     master.Dispose();
 
@@ -159,6 +170,36 @@ namespace DigicomDealerReportGenerator.Models
             }
         }
 
+        private void SetAllNorCalRebateAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
+        {
+            var locations = new List<string> { "Fruitvale", "San Jose", "Hayward", "Concord" };
+
+            foreach (var location in locations)
+            {
+                var row = this.GetCorrespondingRowForLocation(location);
+                var data = this.GetCorrespondingRowDataForLocation(location, sumData);
+                foreach (var date in dateList)
+                {
+                    worksheet.SetValue(row, date.Day + 1, data[date.Day]);
+                }
+            }
+        }
+
+        private void SetAllSoCalRebateAmountsOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList, List<dynamic> sumData)
+        {
+            var locations = new List<string> { "Rosecrans", "Anaheim", "Imperial" };
+
+            foreach (var location in locations)
+            {
+                var row = this.GetCorrespondingRebateRowForLocation(location);
+                var data = this.GetCorrespondingRowDataForLocation(location, sumData);
+                foreach (var date in dateList)
+                {
+                    worksheet.SetValue(row, date.Day + 1, data[date.Day]);
+                }
+            }
+        }
+
         public dynamic GetCorrespondingRowDataForLocation(string location, List<dynamic> sumData)
         {
             var data = new List<dynamic>();
@@ -181,46 +222,50 @@ namespace DigicomDealerReportGenerator.Models
                 case "Fruitvale":
                     return 4;
                 case "San Jose":
-                    return 8;
+                    return 9;
                 case "Hayward":
-                    return 12;
+                    return 14;
                 case "Concord":
-                    return 16;
+                    return 19;
                 case "Rosecrans":
-                    return 26;
+                    return 31;
                 case "Anaheim":
-                    return 30;
+                    return 36;
                 case "Imperial":
-                    return 34;
+                    return 41;
                 default:
                     return 4;
-                //case "Fruitvale":
-                //    return 5;
-                //case "San Jose":
-                //    return 9;
-                //case "Hayward":
-                //    return 13;
-                //case "Concord":
-                //    return 17;
-                //case "Salinas":
-                //    return 21;
-                //case "Rosecrans":
-                //    return 31;
-                //case "Anaheim":
-                //    return 35;
-                //case "Imperial":
-                //    return 39;
-                //case "Santa Maria":
-                //    return 43;
-                //default:
-                //    return 5;
+            }
+        }
+
+        public int GetCorrespondingRebateRowForLocation(string location)
+        {
+            switch (location)
+            {
+                //2014 Mod
+                case "Fruitvale":
+                    return 5;
+                case "San Jose":
+                    return 10;
+                case "Hayward":
+                    return 15;
+                case "Concord":
+                    return 20;
+                case "Rosecrans":
+                    return 32;
+                case "Anaheim":
+                    return 37;
+                case "Imperial":
+                    return 42;
+                default:
+                    return 4;
             }
         }
         
         private void SetAllDatesOnWorksheet(ref ExcelWorksheet worksheet, List<DateTime> dateList)
         {
             //2014
-            var dateRows = new List<int> { 2, 6, 10, 14, 18, 24, 28, 32, 36, 41 };
+            var dateRows = new List<int> { 2, 7, 12, 17, 22, 29, 34, 39, 45, 51 };
             
             //2013
             //var dateRows = new List<int> { 3, 7, 11, 15, 19, 23, 29, 33, 37, 41, 45, 50 };
@@ -256,6 +301,17 @@ namespace DigicomDealerReportGenerator.Models
             return sumPerLocationPerDay;
         }
 
+        public decimal GetSumPerLocationPerDay(string location, DateTime date, IEnumerable<RebateTransactionRow> adjustedMasterList)
+        {
+            var matchingLocations = adjustedMasterList
+                                     .ToList()
+                                     .Where(q => q.Location == location && q.TransactionDate.Equals(date)).ToList();
+
+            var sumPerLocationPerDay = matchingLocations.Select(qa => qa.RebateAmount).Sum();
+
+            return sumPerLocationPerDay;
+        }
+
         public decimal GetTotalSumLocationsPerDay(DateTime date, IEnumerable<ITransactionRow> adjustedMasterList)
         {
             var validLocations = adjustedMasterList.Select(a => a as QualifiedTransactionRow)
@@ -277,12 +333,29 @@ namespace DigicomDealerReportGenerator.Models
 
             return locations;
         }
+
+        public dynamic GetDistinctLocations(IEnumerable<RebateTransactionRow> adjustedMasterList)
+        {
+            var locations = adjustedMasterList
+                                           .Select(l => l.Location)
+                                           .Distinct()
+                                           .ToList();
+            locations.Remove(null);
+
+            return locations;
+        }
         
         public IEnumerable<ITransactionRow> CreateAdjustedReportData(IEnumerable<ITransactionRow> masterList, DateTime dateSelect)
         {
             var adjustedData = DataHelpers.AdjustTransactionDates(masterList, dateSelect);
             return adjustedData;
         }
+
+        //public IEnumerable<ITransactionRow> CreateAdjustedReportData(IEnumerable<RebateTransactionRow> masterList, DateTime dateSelect)
+        //{
+        //    var adjustedData = DataHelpers.AdjustTransactionDates(masterList, dateSelect);
+        //    return adjustedData;
+        //}
 
         protected ExcelWorksheet AppendReportData(IEnumerable<ITransactionRow> reportDataRows, ExcelPackage package, DateTime dateSelect)
         {

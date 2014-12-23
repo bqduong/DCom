@@ -25,6 +25,10 @@ namespace DigicomDealerReportGenerator.ViewModels
 
         private string soCalSourcePath;
 
+        private string bayAreaRebateSourcePath;
+
+        private string soCalRebateSourcePath;
+
         private string qPayRetailMasterSourcePath;
 
         private string qPayOnlineMasterSourcePath;
@@ -66,6 +70,38 @@ namespace DigicomDealerReportGenerator.ViewModels
                 {
                     this.soCalSourcePath = value;
                     this.NotifyPropertyChanged("SoCalSourcePath");
+                }
+            }
+        }
+
+        public string BayAreaRebateSourcePath
+        {
+            get
+            {
+                return this.bayAreaRebateSourcePath;
+            }
+            set
+            {
+                if (value != this.bayAreaRebateSourcePath)
+                {
+                    this.bayAreaRebateSourcePath = value;
+                    this.NotifyPropertyChanged("BayAreaRebateSourcePath");
+                }
+            }
+        }
+
+        public string SoCalRebateSourcePath
+        {
+            get
+            {
+                return this.soCalRebateSourcePath;
+            }
+            set
+            {
+                if (value != this.soCalRebateSourcePath)
+                {
+                    this.soCalRebateSourcePath = value;
+                    this.NotifyPropertyChanged("SoCalRebateSourcePath");
                 }
             }
         }
@@ -157,6 +193,22 @@ namespace DigicomDealerReportGenerator.ViewModels
             }
         }
 
+        public ICommand LoadBayAreaRebateFileClicked
+        {
+            get
+            {
+                return new SimpleCommand(this.LoadBayAreaRebateFile);
+            }
+        }
+
+        public ICommand LoadSoCalRebateFileClicked
+        {
+            get
+            {
+                return new SimpleCommand(this.LoadSoCalRebateFile);
+            }
+        }
+
         public ICommand LoadQPayRetailMasterClicked
         {
             get
@@ -236,6 +288,56 @@ namespace DigicomDealerReportGenerator.ViewModels
                 catch (Exception e)
                 {
                     this.SoCalSourcePath = "";
+                    MessageBox.Show("Invalid excel file.  Please try again with another file");
+                }
+            }
+        }
+
+
+        protected void LoadBayAreaRebateFile(object param = null)
+        {
+            this.openFile = new OpenFileDialog();
+            if (this.openFile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var sourcePath = this.openFile.FileName;
+                    this.Excel = new ExcelQueryFactory(sourcePath);
+                    LinqToExcelMappingHelpers.MapToLinq(ref this.Excel, DataHelpers.GetReportType, sourcePath);
+
+                    //populate data list
+                    //var isQualified = DataHelpers.IsQualified(sourcePath);
+                    this.callidusReportGeneratorModel.MasterBayAreaRebateTransactionList = (IEnumerable<RebateTransactionRow>) DataHelpers.GetMasterListOfRebateRows(this.Excel);
+
+                    this.BayAreaRebateSourcePath = sourcePath;
+                }
+                catch (Exception e)
+                {
+                    this.BayAreaRebateSourcePath = "";
+                    MessageBox.Show("Invalid excel file.  Please try again with another file");
+                }
+            }
+        }
+
+        protected void LoadSoCalRebateFile(object param = null)
+        {
+            this.openFile = new OpenFileDialog();
+            if (this.openFile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    var sourcePath = this.openFile.FileName;
+                    this.Excel = new ExcelQueryFactory(sourcePath);
+                    LinqToExcelMappingHelpers.MapToLinq(ref this.Excel, DataHelpers.GetReportType, sourcePath);
+
+                    //populate data list
+                    this.callidusReportGeneratorModel.MasterSoCalRebateTransactionList = (IEnumerable<RebateTransactionRow>)DataHelpers.GetMasterListOfRebateRows(this.Excel);
+
+                    this.SoCalRebateSourcePath = sourcePath;
+                }
+                catch (Exception e)
+                {
+                    this.SoCalRebateSourcePath = "";
                     MessageBox.Show("Invalid excel file.  Please try again with another file");
                 }
             }

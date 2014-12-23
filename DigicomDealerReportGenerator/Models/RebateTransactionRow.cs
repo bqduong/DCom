@@ -14,6 +14,8 @@ namespace DigicomDealerReportGenerator.Models
 
         public string Address { get; set; }
 
+        public string Location { get; set; }
+
         public string AccountNo { get; set; }
 
         public string SubscriberId { get; set; }

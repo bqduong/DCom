@@ -250,8 +250,8 @@ namespace DigicomDealerReportGenerator.ViewModels
                     this.MasterDealerIdentificationList = DataHelpers.GenerateDoorNameListWithDoorCode(null, this.MasterTransactionList);
 
                     //populate date range
-                    this.StartDate = DataHelpers.GetEarliestDate(this.MasterTransactionList);
-                    this.EndDate = DataHelpers.GetLatestDate(this.MasterTransactionList);
+                    this.StartDate = DataHelpers.GetEarliestPostedDate(this.MasterTransactionList);
+                    this.EndDate = DataHelpers.GetLatestPostedDate(this.MasterTransactionList);
                 }
                 catch (Exception e)
                 {

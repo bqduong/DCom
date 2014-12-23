@@ -108,6 +108,30 @@ namespace DigicomDealerReportGenerator
             return startDate;
         }
 
+        public static DateTime GetLatestPostedDate(IEnumerable<IRebateRow> masterList)
+        {
+            var endDate = new DateTime();
+            endDate =
+                    masterList.Select(transactionRow => transactionRow as RebateTransactionRow)
+                              .ToList()
+                              .Select(l => l.PostedDate)
+                              .Where(l => l.Year != 0001)
+                              .Max(l => l.Date);
+            return endDate;
+        }
+
+        public static DateTime GetEarliestPostedDate(IEnumerable<IRebateRow> masterList)
+        {
+            var startDate = new DateTime();
+            startDate =
+                    masterList.Select(transactionRow => transactionRow as RebateTransactionRow)
+                              .ToList()
+                              .Select(l => l.PostedDate)
+                              .Where(l => l.Year != 0001)
+                              .Min(l => l.Date);
+            return startDate;
+        }
+
 
         public static string GetStartingMonthAndYear(DateTime startDate)
         {
@@ -214,6 +238,23 @@ namespace DigicomDealerReportGenerator
 
             return masterList.Select(transactionRow => transactionRow as QualifiedTransactionRow).ToList();
         }
+
+        //public static IEnumerable<QualifiedTransactionRow> AdjustRebateTransactionDates(IEnumerable<RebateTransactionRow> masterTransactionList, DateTime reportDate)
+        //{
+        //    var masterList = masterTransactionList.Select(rebateRow => rebateRow).ToList();
+
+        //    foreach (var qRow in masterList)
+        //    {
+        //        if (qRow.TransactionDate.Month != reportDate.Month && qRow.TransactionDate.Year != 0001)
+        //        {
+        //            //qRow.BoltOn = qRow.TransactionDate.ToShortTimeString();
+        //            qRow.TransactionDate = GetMatchingTransactionDate(masterTransactionList, qRow.PostedDate,
+        //                                                              qRow.TransactionDate);
+        //        }
+        //    }
+
+        //    return masterList.Select(transactionRow => transactionRow as QualifiedTransactionRow).ToList();
+        //}
 
         public static DateTime GetMatchingTransactionDate(IEnumerable<ITransactionRow> masterTransactionList, DateTime targetPostedDate, DateTime originalTransactionDate)
         {
