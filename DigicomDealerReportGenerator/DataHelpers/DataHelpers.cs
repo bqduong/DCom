@@ -217,7 +217,7 @@ namespace DigicomDealerReportGenerator
         {
             return
                 rebateRows.Select(transactionRow => transactionRow as RebateTransactionRow)
-                    .Where(t => t.DoorCode == doorCode && t.TransactionDate >= startDate && t.TransactionDate <= endDate)
+                    .Where(t => t.DoorCode == doorCode && t.PostedDate >= startDate && t.PostedDate <= endDate)
                     .OrderBy(t => t.PostedDate)
                     .ToList();
         }

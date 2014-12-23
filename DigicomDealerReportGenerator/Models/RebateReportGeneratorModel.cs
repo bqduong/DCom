@@ -142,7 +142,8 @@ namespace DigicomDealerReportGenerator.Models
         {
             var rows = reportDataRows.Select(transactionRow => transactionRow as RebateTransactionRow).ToList();
             var properties = new RebateTransactionRow().GetType().GetProperties().ToList();
-            
+            var locationProperty = properties.SingleOrDefault(p => p.Name == "Location");
+            properties.Remove(locationProperty);
             var startRow = worksheet.Dimension.End.Row + 1;
             for (int i = 0; i < rows.Count; i++)
             {
